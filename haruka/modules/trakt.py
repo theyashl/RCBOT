@@ -2,14 +2,14 @@ from trakt import Trakt
 from haruka import dispatcher, MESSAGE_DUMP, LOGGER
 from haruka.modules.disable import DisableAbleCommandHandler
 from telegram import ParseMode, Update
-from telegram.ext import CallbackContext, run_async
+from telegram.ext import run_async
 
 Trakt.configuration.defaults.client(
         id="46fa1c789a7e019574e4946af5824546f05e7dece99f5384bfaeb1c0641bb051"
     )
 
 @run_async
-def trendingm(update: Update, context: CallbackContext):
+def trendingm(update: Update):
     res = "*Trending Movies:*\n\n"
     items = Trakt['movies'].trending()
     for i in range(10):
@@ -18,7 +18,7 @@ def trendingm(update: Update, context: CallbackContext):
     update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
 
 @run_async
-def trendings(update: Update, context: CallbackContext):
+def trendings(update: Update):
     res = "*Trending Shows:*\n\n"
     items = Trakt['shows'].trending()
     for i in range(10):
