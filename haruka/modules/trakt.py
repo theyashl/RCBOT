@@ -5,7 +5,7 @@ from telegram import ParseMode, Update
 from telegram.ext import CallbackContext, run_async
 
 Trakt.configuration.defaults.client(
-        id=46fa1c789a7e019574e4946af5824546f05e7dece99f5384bfaeb1c0641bb051
+        id="46fa1c789a7e019574e4946af5824546f05e7dece99f5384bfaeb1c0641bb051"
     )
 
 @run_async
