@@ -1,7 +1,7 @@
 from trakt import Trakt
 from haruka import dispatcher, MESSAGE_DUMP, LOGGER
 from haruka.modules.disable import DisableAbleCommandHandler
-from telegram import ParseMode, Update
+from telegram import ParseMode, Update, Bot
 from telegram.ext import run_async
 
 Trakt.configuration.defaults.client(
