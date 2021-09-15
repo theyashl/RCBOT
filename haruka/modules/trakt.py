@@ -9,7 +9,7 @@ Trakt.configuration.defaults.client(
     )
 
 @run_async
-def trendingm(update: Update):
+def trendingm(bot: Bot, update: Update):
     res = "*Trending Movies:*\n\n"
     items = Trakt['movies'].trending()
     for i in range(10):
@@ -18,7 +18,7 @@ def trendingm(update: Update):
     update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
 
 @run_async
-def trendings(update: Update):
+def trendings(bot: Bot, update: Update):
     res = "*Trending Shows:*\n\n"
     items = Trakt['shows'].trending()
     for i in range(10):
