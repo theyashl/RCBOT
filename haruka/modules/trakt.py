@@ -17,7 +17,6 @@ def air(bot: Bot, update: Update):
     res = "*Airing Shows:*\n\n"
     tv = tmdb.TV()
     response = tv.airing_today()
-    pretty_data = json.dumps(response, indent=4)
     for j in response['results']:
         res += j['name'] + "\n"
 
