@@ -42,7 +42,7 @@ def umovie(bot: Bot, update: Update):
     response = mov.upcoming()
     for j in response['results']:
         if datetime.datetime.strptime(j['release_date'], "%Y-%m-%d") > datetime.datetime.today():
-            res += j['title'] + ", " + j['release_date']
+            res += j['title'] + ", " + j['release_date'] + "\n"
 
     update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
 
