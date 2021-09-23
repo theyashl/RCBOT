@@ -24,6 +24,28 @@ def air(bot: Bot, update: Update):
 
 
 @run_async
+def otv(bot: Bot, update: Update):
+    res = "*Ongoing TV Shows*\n\n"
+    tv = tmdb.TV()
+    response = tv.on_the_air()
+    for j in response['results']:
+        res += j['name'] + "\n"
+
+    update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
+
+
+@run_async
+def umovie(bot: Bot, update: Update):
+    res = "*Upcoming Movies:*\n\n"
+    mov = tmdb.Movies()
+    response = mov.upcoming()
+    for j in response['results']:
+        if datetime.datetime.strptime(j['release_date'], "%Y-%m-%d") > datetime.datetime.today():
+            res += j['title'] + ", " + j['release_date']
+
+    update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
+
+@run_async
 def trendingm(bot: Bot, update: Update):
     res = "*Trending Movies:*\n\n"
     items = Trakt['movies'].trending()
@@ -44,6 +66,14 @@ def trendings(bot: Bot, update: Update):
 
 AIR_HANDLER = DisableAbleCommandHandler("air", air)
 dispatcher.add_handler(AIR_HANDLER)
+
+
+OTV_HANDLER = DisableAbleCommandHandler("otv", otv)
+dispatcher.add_handler(OTV_HANDLER)
+
+
+UMOVIE_HANDLER = DisableAbleCommandHandler("umovie", umovie)
+dispatcher.add_handler(UMOVIE_HANDLER)
 
 
 TRENDINGS_HANDLER = DisableAbleCommandHandler("trendings", trendings)
