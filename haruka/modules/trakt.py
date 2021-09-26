@@ -89,10 +89,33 @@ def air(bot: Bot, update: Update):
 def otv(bot: Bot, update: Update):
     res = "*Ongoing TV Shows*\n\n"
     tv = tmdb.TV()
-    response = tv.on_the_air()
-    for j in response['results']:
-        res += j['name'] + "\n"
+    KEY = '44ec5f422b554212fb8bd83da7323142'
+    response = []
+    for i in range(1, 3):
+        try:
+            response.append(tv.on_the_air(page=i))
+        except:
+            res += "Sorry, there's been connection error!\nPlease Try again later (After 15-20 minutes.)"
+            break
+    data = []
+    for i in response:
+        for j in i['results']:
+            if j['original_language'] in ["en", "hi", "te", "mr", "ta", "ml"]:
+                data.append(j)
+    del response
+    for i in data:
+        res += "[" + i['name'] + "](https://t.me/share/url?url=/sinfo%20{sid})".format(sid=i['id']) + " (_"
+        try:
+            req = requests.get(
+                "https://api.themoviedb.org/3/tv/{tv_id}/watch/providers?api_key={key}".format(
+                    tv_id=i['id'], key=KEY)).json()['results']
+            for p in req['IN']['flatrate']:
+                res += p['provider_name']
+        except KeyError as e:
+            res += "NA"
+        res += "_)\n"
 
+    del data
     update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
 
 
