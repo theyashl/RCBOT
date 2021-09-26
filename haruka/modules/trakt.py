@@ -5,6 +5,7 @@ from telegram import ParseMode, Update, Bot
 from telegram.ext import run_async
 import tmdbsimple as tmdb
 import datetime
+import requests
 
 
 tmdb.API_KEY = '44ec5f422b554212fb8bd83da7323142'
@@ -15,13 +16,41 @@ Trakt.configuration.defaults.client(
 
 @run_async
 def air(bot: Bot, update: Update):
+    KEY = '44ec5f422b554212fb8bd83da7323142'
     res = "*Airing Shows:*\n\n"
     tv = tmdb.TV()
-    response = tv.airing_today()
-    for j in response['results']:
-        res += j['name'] + "\n"
+    response = []
+    for i in range(1, 3):
+        response.append(tv.airing_today(timezone="IST", page=i))
+    data = []
+    for i in response:
+        for j in i['results']:
+            if j['original_language'] in ["en", "hi", "te", "mr", "ta", "ml"]:
+                data.append(j)
+    res = "*Shows Airing Today:*\n\n"
+    del response
+    for i in data:
+        res += i['name'] + " (_"
+        try:
+            req = requests.get(
+                "https://api.themoviedb.org/3/tv/{tv_id}/watch/providers?api_key={key}".format(
+                    tv_id=i['id'], key=KEY)).json()['results']
+            for p in req['IN']['flatrate']:
+                res += p['provider_name']
+        except KeyError as e:
+            res += "NA"
+        res += "_)\n"
 
-    update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
+    try:
+        COVER = "https://www.themoviedb.org/t/p/original"+data[0]['backdrop_path']
+    except:
+        COVER = "https://scontent.fnag1-1.fna.fbcdn.net/v/t1.6435-9/102459297_105404194547552_1607624959242791968_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=e3f864&_nc_ohc=wxphiccOyAwAX9aMvNC&_nc_ht=scontent.fnag1-1.fna&oh=602a2002ebd85747cbfad534de6414d3&oe=6151A4FC"
+    del data
+    update.effective_message.reply_photo(
+        COVER,
+        res, parse_mode=ParseMode.MARKDOWN,
+        disable_web_page_preview=True
+    )
 
 
 @run_async
