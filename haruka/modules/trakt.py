@@ -7,30 +7,67 @@ import tmdbsimple as tmdb
 import datetime
 import requests
 
-
 tmdb.API_KEY = '44ec5f422b554212fb8bd83da7323142'
 Trakt.configuration.defaults.client(
-        id="46fa1c789a7e019574e4946af5824546f05e7dece99f5384bfaeb1c0641bb051"
+    id="46fa1c789a7e019574e4946af5824546f05e7dece99f5384bfaeb1c0641bb051"
+)
+
+
+@run_async
+def sinfo(bot: Bot, update: Update):
+    message = update.effective_message
+    res = ""
+    # /sinfo 1234
+    sid = message.text[7:]
+    show = tmdb.TV(sid)
+    info = show.info()
+
+    res += "Title: *{name}* ({year})".format(name=info['name'], year=str(info['first_air_date']).split("-")[0])
+    res += "\n\nTagline: " + info['tagline']
+    res += "\n\nGenres: "
+    for g in info['genres']:
+        res += g['name'] + " "
+    res += "\n\nOverview: " + info['overview']
+    res += "\n\nRecent Episode: " + info['last_episode_to_air']['name'] + " (S{s}E{e})".format(
+        s=info['last_episode_to_air']['season_number'],
+        e=info['last_episode_to_air']['episode_number'])
+    res += "\n\nRecommendations:\n"
+    recs = show.recommendations()
+    recs = recs['results'][:5]
+    for r in recs:
+        res += "\n" + "[" + r['name'] + "](https://t.me/share/url?url=/sinfo%20{sid})".format(sid=r['id'])
+
+    POSTER = "https://www.themoviedb.org/t/p/original" + info['poster_path']
+    del show
+    del info
+    del recs
+    update.effective_message.reply_photo(
+        POSTER,
+        res, parse_mode=ParseMode.MARKDOWN,
+        disable_web_page_preview=True
     )
 
 
 @run_async
 def air(bot: Bot, update: Update):
     KEY = '44ec5f422b554212fb8bd83da7323142'
-    res = "*Airing Shows:*\n\n"
+    res = "*Shows Airing Today:*\n\n"
     tv = tmdb.TV()
     response = []
     for i in range(1, 3):
-        response.append(tv.airing_today(timezone="IST", page=i))
+        try:
+            response.append(tv.airing_today(timezone="IST", page=i))
+        except:
+            res += "Sorry, there's been connection error!\nPlease Try again later (After 15-20 minutes.)"
+            break
     data = []
     for i in response:
         for j in i['results']:
             if j['original_language'] in ["en", "hi", "te", "mr", "ta", "ml"]:
                 data.append(j)
-    res = "*Shows Airing Today:*\n\n"
     del response
     for i in data:
-        res += i['name'] + " (_"
+        res += "[" + i['name'] + "](https://t.me/share/url?url=/sinfo%20{sid})".format(sid=i['id']) + " (_"
         try:
             req = requests.get(
                 "https://api.themoviedb.org/3/tv/{tv_id}/watch/providers?api_key={key}".format(
@@ -41,15 +78,10 @@ def air(bot: Bot, update: Update):
             res += "NA"
         res += "_)\n"
 
-    try:
-        COVER = "https://www.themoviedb.org/t/p/original"+data[0]['backdrop_path']
-    except:
-        COVER = "https://scontent.fnag1-1.fna.fbcdn.net/v/t1.6435-9/102459297_105404194547552_1607624959242791968_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=e3f864&_nc_ohc=wxphiccOyAwAX9aMvNC&_nc_ht=scontent.fnag1-1.fna&oh=602a2002ebd85747cbfad534de6414d3&oe=6151A4FC"
     del data
-    update.effective_message.reply_photo(
-        COVER,
+    update.effective_message.reply_text(
         res, parse_mode=ParseMode.MARKDOWN,
-        disable_web_page_preview=True
+        disable_web_page_preview=False
     )
 
 
@@ -75,6 +107,7 @@ def umovie(bot: Bot, update: Update):
 
     update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
 
+
 @run_async
 def trendingm(bot: Bot, update: Update):
     res = "*Trending Movies:*\n\n"
@@ -83,6 +116,7 @@ def trendingm(bot: Bot, update: Update):
         res += items[i].title + " (" + str(items[i].year) + ")\n"
 
     update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
+
 
 @run_async
 def trendings(bot: Bot, update: Update):
@@ -94,17 +128,17 @@ def trendings(bot: Bot, update: Update):
     update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
 
 
+SINFO_HANDLER = DisableAbleCommandHandler("sinfo", sinfo)
+dispatcher.add_handler(SINFO_HANDLER)
+
 AIR_HANDLER = DisableAbleCommandHandler("air", air)
 dispatcher.add_handler(AIR_HANDLER)
-
 
 OTV_HANDLER = DisableAbleCommandHandler("otv", otv)
 dispatcher.add_handler(OTV_HANDLER)
 
-
 UMOVIE_HANDLER = DisableAbleCommandHandler("umovie", umovie)
 dispatcher.add_handler(UMOVIE_HANDLER)
-
 
 TRENDINGS_HANDLER = DisableAbleCommandHandler("trendings", trendings)
 dispatcher.add_handler(TRENDINGS_HANDLER)
