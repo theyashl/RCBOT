@@ -27,10 +27,19 @@ def sinfo(bot: Bot, update: Update):
     res += "\n\nGenres: "
     for g in info['genres']:
         res += g['name'] + " "
-    res += "\n\nOverview: " + info['overview']
+    res += "\n\nStatus: " + info['status']
     res += "\n\nRecent Episode: " + info['last_episode_to_air']['name'] + " (S{s}E{e})".format(
         s=info['last_episode_to_air']['season_number'],
         e=info['last_episode_to_air']['episode_number'])
+    if info['status'] != "Ended":
+        res += "\n\nNext episode: "
+        try:
+            res += info['next_episode_to_air']['name'] + " (S{0}E{1}) ".format(
+                info['next_episode_to_air']['season_number'],
+                info['next_episode_to_air']['episode_number']) + " ({})".format(info['next_episode_to_air']['air_date'])
+        except TypeError:
+            res += "_NA_"
+    res += "\n\nNetwork: " + info['networks'][0]['name']
     res += "\n\nRecommendations:\n"
     recs = show.recommendations()
     recs = recs['results'][:5]
