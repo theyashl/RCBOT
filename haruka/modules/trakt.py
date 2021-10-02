@@ -22,26 +22,26 @@ def sinfo(bot: Bot, update: Update):
     show = tmdb.TV(sid)
     info = show.info()
 
-    res += "Title: *{name}* ({year})".format(name=info['name'], year=str(info['first_air_date']).split("-")[0])
-    res += "\n\nTagline: " + info['tagline']
-    res += "\n\nGenres: "
+    res += "*Title: {name}* ({year})".format(name=info['name'], year=str(info['first_air_date']).split("-")[0])
+    res += "\n_" + info['tagline'] + "_"
+    res += "\n*Genres:* "
     for g in info['genres']:
         res += g['name'] + " "
-    res += "\n\nOverview: " + info['overview']
-    res += "\n\nStatus: " + info['status']
-    res += "\n\nRecent Episode: " + info['last_episode_to_air']['name'] + " (S{s}E{e})".format(
+    res += "\n*Overview:* " + info['overview']
+    res += "\n\n*Status:* " + info['status']
+    res += "\n*Recent Episode:* " + info['last_episode_to_air']['name'] + " (S{s}E{e})".format(
         s=info['last_episode_to_air']['season_number'],
         e=info['last_episode_to_air']['episode_number'])
     if info['status'] != "Ended":
-        res += "\n\nNext episode: "
+        res += "\n*Next episode:* "
         try:
             res += info['next_episode_to_air']['name'] + " (S{0}E{1}) ".format(
                 info['next_episode_to_air']['season_number'],
                 info['next_episode_to_air']['episode_number']) + " ({})".format(info['next_episode_to_air']['air_date'])
         except TypeError:
             res += "_NA_"
-    res += "\n\nNetwork: [" + info['networks'][0]['name'] + "]({})".format(info['homepage'])
-    res += "\n\nRecommendations:"
+    res += "\n*Network:* [" + info['networks'][0]['name'] + "]({})".format(info['homepage'])
+    res += "\n\n*Recommendations:*"
     recs = show.recommendations()
     recs = recs['results'][:5]
     for r in recs:
