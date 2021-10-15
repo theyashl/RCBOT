@@ -14,6 +14,79 @@ Trakt.configuration.defaults.client(
 
 
 @run_async
+def tvair(bot: Bot, update: Update):
+    KEY = '44ec5f422b554212fb8bd83da7323142'
+    res = ""
+
+    def extractdata(file):
+        for line in file:
+            line = str(line)
+            if "calendar :" in line:
+                return line
+
+    url = "https://www.tvtime.com/en/calendar"
+    headers = {
+        'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                      "Chrome/92.0.4515.159 Safari/537.36 Edg/92.0.902.84"}
+    response = requests.get(url, headers=headers)
+    data = response.text
+
+    soup = BS(data, 'lxml')
+    op = soup.find_all("script", attrs={"type": "text/javascript"})[4]
+    data = extractdata(op).split(";", maxsplit=1)[1]
+    del op, soup
+    data = data.split("=", maxsplit=1)[1]
+    data = data.split("'", maxsplit=2)[1]
+    data = data.replace("\&quot;", '"')
+    data = data.replace("\&#039;", "'")
+    data = data.replace(',"', ',\n"')
+    data = data.replace("{", " { ")
+    data = data.replace("\\\/", "/")
+    data = data.replace('\\\\"', '')
+    data.strip()
+    fop = json.loads(data)
+
+    today = str(datetime.date.today())
+    ids = []
+    data = []
+    for show in fop:
+        if show['air_date'] == today:
+            data.append(show)
+    del fop
+
+    def sfunc(s):
+        return s['show']['nb_followers']
+
+    data.sort(reverse=True, key=sfunc)
+
+    for show in data:
+        ids.append(show['show']['id'])
+
+    ids = sorted(set(ids), key=lambda x: ids.index(x))
+    for id in ids:
+        item = Trakt['search'].lookup(id, 'tvdb')[0].to_identifier()
+        try:
+            res += "[" + str(item['title']) + "](https://t.me/share/url?url=/sinfo%20{sid})".format(
+                sid=item['ids']['tmdb']) + " (_"
+            try:
+                req = requests.get(
+                    "https://api.themoviedb.org/3/tv/{tv_id}/watch/providers?api_key={key}".format(
+                        tv_id=item['ids']['tmdb'], key=KEY)).json()['results']
+                for p in req['IN']['flatrate']:
+                    res += p['provider_name']
+            except KeyError as e:
+                res += "NA"
+            res += "_)\n"
+        except KeyError:
+            pass
+    del data, ids
+    update.effective_message.reply_text(
+        res, parse_mode=ParseMode.MARKDOWN,
+        disable_web_page_preview=False
+    )
+
+
+@run_async
 def sinfo(bot: Bot, update: Update):
     message = update.effective_message
     res = ""
