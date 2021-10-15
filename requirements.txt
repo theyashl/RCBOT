@@ -29,3 +29,4 @@ bleach
 markdown2
 trakt.py
 tmdbsimple
+lxml
