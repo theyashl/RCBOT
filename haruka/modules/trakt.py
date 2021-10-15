@@ -7,6 +7,7 @@ import tmdbsimple as tmdb
 import datetime
 import requests
 from bs4 import BeautifulSoup as BS
+import json
 
 tmdb.API_KEY = '44ec5f422b554212fb8bd83da7323142'
 Trakt.configuration.defaults.client(
