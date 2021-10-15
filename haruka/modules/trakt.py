@@ -234,6 +234,9 @@ def trendings(bot: Bot, update: Update):
     update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
 
 
+TVAIR_HANDLER = DisableAbleCommandHandler("tvair", tvair)
+dispatcher.add_handler(TVAIR_HANDLER)
+
 SINFO_HANDLER = DisableAbleCommandHandler("sinfo", sinfo)
 dispatcher.add_handler(SINFO_HANDLER)
 
