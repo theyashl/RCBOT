@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup as BS
 import json
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 import selenium
 import time
 import pyperclip
@@ -40,6 +41,7 @@ def pahedl(bot: Bot, update: Update):
     profile.set_preference("browser.download.manager.showWhenStarting", False)
     profile.set_preference("browser.download.dir", str(update.effective_user.id))
     profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/x-gzip")
+    binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
     driver = webdriver.Firefox(profile, firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'))
     driver.get('https://pahe.ph/')
 
