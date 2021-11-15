@@ -2,7 +2,6 @@ from haruka import dispatcher, MESSAGE_DUMP, LOGGER
 from haruka.modules.disable import DisableAbleCommandHandler
 from telegram import ParseMode, Update, Bot
 from telegram.ext import run_async
-import tmdbsimple as tmdb
 import datetime
 import requests
 from bs4 import BeautifulSoup as BS
@@ -40,7 +39,7 @@ def pahedl(bot: Bot, update: Update):
     profile.set_preference("browser.download.manager.showWhenStarting", False)
     profile.set_preference("browser.download.dir", str(update.effective_user.id))
     profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/x-gzip")
-    driver = webdriver.Firefox(profile)
+    driver = webdriver.Firefox(profile, executable_path=os.environ.get('GECKODRIVER_PATH'))
     driver.get('https://pahe.ph/')
 
     # Finding The SearchBox
