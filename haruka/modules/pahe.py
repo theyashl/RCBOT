@@ -72,8 +72,8 @@ def pahedl(bot: Bot, update: Update):
     time.sleep(7)
 
     # Opening The Movie Page
-    MovieLink = driver.find_elements_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/div/ul[1]/li/div[1]/h2/a')
-    MovieLink[1].click()
+    MovieLink = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/div/ul[1]/li/div[1]/h2/a')
+    MovieLink.click()
 
     # Adding 5 Second Pause
     time.sleep(5)
@@ -97,6 +97,7 @@ def pahedl(bot: Bot, update: Update):
         GoogleDriveLink[1].click()
 
     # Switching To The Newly Opened Tab
+    print("Finally here!")
     window_after = driver.window_handles[1]
     driver.switch_to.window(window_after)
 
