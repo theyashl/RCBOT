@@ -55,6 +55,8 @@ def pahedl(bot: Bot, update: Update):
     profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/x-gzip")
     driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'), options=options)
     driver.get('https://pahe.ph/')
+    time.sleep(3)
+    print(driver.title)
 
     # Finding The SearchBox
     searchbox = driver.find_element_by_xpath('//*[@id="s-header"]')
@@ -73,7 +75,7 @@ def pahedl(bot: Bot, update: Update):
 
     # Opening The Movie Page
     MovieLink = driver.find_elements_by_xpath('//h2//a')
-    print("l1: ", MovieLink.text)
+    print("l1: ", MovieLink[1].text)
     MovieLink = driver.find_element_by_xpath('//*[@id="main-content"]/div[1]/div[2]/div/div/ul[1]/li/div[1]/h2/a')
     print("l2: ", MovieLink.text)
     MovieLink.click()
