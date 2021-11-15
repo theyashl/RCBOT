@@ -85,13 +85,14 @@ def pahedl(bot: Bot, update: Update):
 
     # Getting File Name
     Name = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/h1/span')
-    print("Name: ", Name)
+    print("Name: ", Name.text)
     download_directory = tmp_directory_for_each_user + "/"
 
     # Opeing The GDrive Links/First GDLink In 720p Section
     for o in range(0, 2):
         GoogleDriveLink = WebDriverWait(driver, 1000000).until(EC.element_to_be_clickable((By.XPATH,'//*[@class="shortc-button small purple "]')))
         GoogleDriveLink.location_once_scrolled_into_view
+        GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small purple "]')
         print(GoogleDriveLink)
         GoogleDriveLink[1].click()
 
