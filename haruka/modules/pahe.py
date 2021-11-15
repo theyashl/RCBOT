@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup as BS
 import json
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-#from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 import selenium
 import time
 import pyperclip
@@ -35,13 +35,21 @@ def pahedl(bot: Bot, update: Update):
     print("\n" + 'Getting link For ' + str(MovieName) + ' To Download')
 
     # Openining The Browser & Getting To Pahe.in
+    options = webdriver.FirefoxOptions()
+    options.log.level = "trace"
+    options.add_argument("-remote-debugging-port=9224")
+    options.add_argument("-headless")
+    options.add_argument("-disable-gpu")
+    options.add_argument("-no-sandbox")
+
+    binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
 
     profile = webdriver.FirefoxProfile()
     profile.set_preference("browser.download.folderList", 2)
     profile.set_preference("browser.download.manager.showWhenStarting", False)
     profile.set_preference("browser.download.dir", str(update.effective_user.id))
     profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/x-gzip")
-    driver = webdriver.Firefox(profile)
+    driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'), options=options)
     driver.get('https://pahe.ph/')
 
     # Finding The SearchBox
