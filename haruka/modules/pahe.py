@@ -60,7 +60,8 @@ def pahedl(bot: Bot, update: Update):
 
     # Finding The SearchBox
     searchbox = driver.find_element_by_xpath('//*[@id="s-header"]')
-    searchbox.click()
+    driver.execute_script("arguments[0].click();", searchbox)
+    #searchbox.click()
 
     # Removing The 'Search' From The Search Bar
     for i in range(0, 6):
