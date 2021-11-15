@@ -72,7 +72,10 @@ def pahedl(bot: Bot, update: Update):
     time.sleep(10)
 
     # Opening The Movie Page
-    MovieLink = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/div/ul[1]/li/div[1]/h2/a')
+    MovieLink = driver.find_elements_by_xpath('//h2//a')
+    print("l1: ", MovieLink.text)
+    MovieLink = driver.find_element_by_xpath('//*[@id="main-content"]/div[1]/div[2]/div/div/ul[1]/li/div[1]/h2/a')
+    print("l2: ", MovieLink.text)
     MovieLink.click()
 
     # Adding 5 Second Pause
