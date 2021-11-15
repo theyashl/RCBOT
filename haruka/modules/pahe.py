@@ -9,6 +9,9 @@ import json
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 import selenium
 import time
 import pyperclip
@@ -19,6 +22,7 @@ import os
 @run_async
 def pahedl(bot: Bot, update: Update):
     msg = update.effective_message
+    msg = msg.text[6:]
     start_time = time.time()
 
     # Getting User Input
@@ -85,6 +89,7 @@ def pahedl(bot: Bot, update: Update):
 
     # Opeing The GDrive Links/First GDLink In 720p Section
     for o in range(0, 2):
+        GoogleDriveLink = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH,'//*[@class="shortc-button small purple "]')))
         GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small purple "]')
         GoogleDriveLink[1].click()
 
@@ -132,6 +137,7 @@ def pahedl(bot: Bot, update: Update):
     driver.switch_to.window(window_after)
 
     # Opeing A New Tab For StackOverflow To Bypass Gmail Login Security Issue Due To Autoamtion
+    print("Stack Overflow ByPass")
     NewTab = driver.find_element_by_tag_name('body')
     NewTab.send_keys(Keys.CONTROL + 't')
 
