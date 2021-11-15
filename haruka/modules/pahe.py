@@ -69,7 +69,7 @@ def pahedl(bot: Bot, update: Update):
     searchbox.send_keys(Keys.ENTER)
 
     # Adding 7 Second Pause
-    time.sleep(7)
+    time.sleep(10)
 
     # Opening The Movie Page
     MovieLink = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/div/ul[1]/li/div[1]/h2/a')
