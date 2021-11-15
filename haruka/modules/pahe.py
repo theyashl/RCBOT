@@ -40,7 +40,7 @@ def pahedl(bot: Bot, update: Update):
     profile.set_preference("browser.download.manager.showWhenStarting", False)
     profile.set_preference("browser.download.dir", str(update.effective_user.id))
     profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/x-gzip")
-    driver = webdriver.Firefox(profile, executable_path=os.environ.get('GECKODRIVER_PATH'))
+    driver = webdriver.Firefox(profile, firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'))
     driver.get('https://pahe.ph/')
 
     # Finding The SearchBox
