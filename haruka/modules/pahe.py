@@ -38,7 +38,7 @@ def pahedl(bot: Bot, update: Update):
     profile = webdriver.FirefoxProfile()
     profile.set_preference("browser.download.folderList", 2)
     profile.set_preference("browser.download.manager.showWhenStarting", False)
-    profile.set_preference("browser.download.dir", str(update.from_user.id))
+    profile.set_preference("browser.download.dir", str(update.effective_user.id))
     profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/x-gzip")
     driver = webdriver.Firefox(profile)
     driver.get('https://pahe.ph/')
@@ -66,7 +66,7 @@ def pahedl(bot: Bot, update: Update):
     time.sleep(5)
 
     # Creating Download Dir
-    tmp_directory_for_each_user = str(update.from_user.id)
+    tmp_directory_for_each_user = str(update.effective_user.id)
     if not os.path.isdir(tmp_directory_for_each_user):
         os.makedirs(tmp_directory_for_each_user)
 
@@ -288,7 +288,7 @@ def pahedl(bot: Bot, update: Update):
     print(time.strftime("%H:%M:%S", time.gmtime(elapsed_time)))
 
     # getting downloaded fle
-    rootdir = "./" + str(update.from_user.id)
+    rootdir = "./" + str(update.effective_user.id)
     regex = re.compile(MovieName[0] + '.*')
 
     for root, dirs, files in os.walk(rootdir):
@@ -296,7 +296,7 @@ def pahedl(bot: Bot, update: Update):
             if regex.match(file):
                 download_directory += file
 
-    await bot.send_document(
+    bot.send_document(
         chat_id=update.message.chat.id,
         document=download_directory,
         caption=Name,
