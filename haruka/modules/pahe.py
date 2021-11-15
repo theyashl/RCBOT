@@ -104,20 +104,22 @@ def pahedl(bot: Bot, update: Update):
 
     # Switching To The Newly Opened Tab
     print("Finally here!")
-    window_after = driver.window_handles[1]
-    driver.switch_to.window(window_after)
+    '''window_after = driver.window_handles[1]
+    driver.switch_to.window(window_after)'''
 
     # Adding 30 Second Pause For Loading The Page
     time.sleep(30)
 
     # Clicking I Am Not A Robot Button
-    Robot = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/div/form/div/div[2]')
+    Robot = driver.find_element_by_xpath('/html/body/div[2]/div/div[1]/div/form/div/div[2]/center/img')
     Robot.click()
+    print("Robot Passed")
 
     # Adding 15 Second Pause For Loading The Page
     time.sleep(15)
 
     # Clicking Generate Link Button
+    print("Generating Link")
     GenerateLink = driver.find_element_by_xpath('//*[@id="generater"]')
     GenerateLink.click()
 
@@ -132,19 +134,21 @@ def pahedl(bot: Bot, update: Update):
     time.sleep(15)
 
     # Switching To The Newly Opened Tab
-    window_after = driver.window_handles[2]
+    window_after = driver.window_handles[1]
     driver.switch_to.window(window_after)
+    print("On new tab")
 
     # Addin 10 Second Pause To Load The Page Properly
     time.sleep(10)
 
     # Clicking Continue Button On Spacetica
-    Con = driver.find_element_by_xpath('/html/body/section/div/div/div/div[3]/p/a')
+    Con = driver.find_element_by_xpath('/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')
     Con.click()
+    print("Clicked Continue")
 
     # Switching To Klop Login
-    window_after = driver.window_handles[3]
-    driver.switch_to.window(window_after)
+    '''window_after = driver.window_handles[3]
+    driver.switch_to.window(window_after)'''
 
     # Opeing A New Tab For StackOverflow To Bypass Gmail Login Security Issue Due To Autoamtion
     print("Stack Overflow ByPass")
@@ -152,7 +156,7 @@ def pahedl(bot: Bot, update: Update):
     NewTab.send_keys(Keys.CONTROL + 't')
 
     # Switching To The New Tab
-    window_after = driver.window_handles[4]
+    window_after = driver.window_handles[2]
     driver.switch_to.window(window_after)
 
     # Getting StackOverflow SignUp Page For Logging In Gmail
@@ -162,8 +166,9 @@ def pahedl(bot: Bot, update: Update):
     time.sleep(5)
 
     # Clicking The Signin With Gmail Button
-    SignUp = driver.find_element_by_xpath('/html/body/div[4]/div[2]/div/div[2]/div[2]/button[1]')
+    SignUp = driver.find_element_by_xpath('/html/body/div[3]/div[2]/div/div[2]/div[2]/button[1]')
     SignUp.click()
+    print("Signing up with google")
 
     # Typing Email On Gmail For Login
     EmailField = driver.find_element_by_xpath('//input[@id="identifierId"]')
@@ -174,13 +179,14 @@ def pahedl(bot: Bot, update: Update):
 
     # Clicking The Next Button To Get Forwarded To Entering The Password
     EmailForward = driver.find_element_by_xpath(
-        '/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[2]/div/div[1]/div/div/span/span')
+        '/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[2]/div/div[1]/div/div/button/span')
     EmailForward.click()
 
     # Adding 2 Second Sleep In Case
     time.sleep(2)
 
     # Typing Password On Gmail For Login
+    print("Entering Password")
     PasswordField = driver.find_element_by_xpath(
         '/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div[1]/div/div/div/div/div[1]/div/div[1]/input')
     PasswordField.send_keys(Password)
@@ -189,15 +195,21 @@ def pahedl(bot: Bot, update: Update):
     time.sleep(2)
 
     # Clicking The Next Button To Get Forwarded To The Permission Page For GDrive
+    print("Password next")
     PasswordForward = driver.find_element_by_xpath('//*[@id="passwordNext"]')
     PasswordForward.click()
 
     # Switching Back To The Previous Tab
-    window_after = driver.window_handles[3]
+    window_after = driver.window_handles[1]
     driver.switch_to.window(window_after)
 
     # Adding 5 Second Pause To Load The Page Properly
     time.sleep(5)
+
+    # gdtot new
+    dlbtn = driver.find_element_by_xpath('//*[@id="down1"]')
+    dlbtn.click()
+    #gdtot end
 
     # Clicking Allow Button For Permission
     for p in range(0, 2):
