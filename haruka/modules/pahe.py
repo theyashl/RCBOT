@@ -12,6 +12,7 @@ import selenium
 import time
 import pyperclip
 import re
+import os
 
 
 @run_async
