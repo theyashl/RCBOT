@@ -51,9 +51,9 @@ def pahedl(bot: Bot, update: Update):
     profile = webdriver.FirefoxProfile()
     profile.set_preference("browser.download.folderList", 2)
     profile.set_preference("browser.download.manager.showWhenStarting", False)
-    profile.set_preference("browser.download.dir", str(update.effective_user.id))
+    profile.set_preference("browser.download.dir", '/app/'+str(update.effective_user.id))
     profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/x-gzip")
-    driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'), options=options)
+    driver = webdriver.Firefox(firefox_binary=binary, firefox_profile=profile, executable_path=os.environ.get('GECKODRIVER_PATH'), options=options)
     driver.get('https://pahe.ph/')
     time.sleep(3)
     print(driver.title)
@@ -87,12 +87,15 @@ def pahedl(bot: Bot, update: Update):
     # Creating Download Dir
     tmp_directory_for_each_user = str(update.effective_user.id)
     if not os.path.isdir(tmp_directory_for_each_user):
+        print('DirectoryNAcreating...')
         os.makedirs(tmp_directory_for_each_user)
+    else:
+        print('!!!directoryavailable')
 
     # Getting File Name
     Name = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/h1/span')
     print("Name: ", Name.text)
-    download_directory = tmp_directory_for_each_user + "/"
+    download_directory = '/app/' + tmp_directory_for_each_user + '/'
 
     # Opeing The GDrive Links/First GDLink In 720p Section
     for o in range(0, 2):
@@ -210,7 +213,7 @@ def pahedl(bot: Bot, update: Update):
     dlbtn = driver.find_element_by_xpath('//*[@id="down1"]')
     dlbtn.click()
     #gdtot end
-
+    '''
     # Clicking Allow Button For Permission
     for p in range(0, 2):
         abc = driver.find_element_by_xpath('/html/body/div/div/div[2]/form/center/button')
@@ -230,8 +233,7 @@ def pahedl(bot: Bot, update: Update):
     # Switching To The Code Tab
     window_after = driver.window_handles[4]
     driver.switch_to.window(window_after)
-
-    # Adding 3 Second Pause
+    # Adding 3 Second Pause'''
     time.sleep(3)
 
     # Clicking The Account Logged In Before
@@ -243,14 +245,14 @@ def pahedl(bot: Bot, update: Update):
     time.sleep(7)
 
     # Clicking Allow For Drive Permissions
-    Allow = driver.find_element_by_xpath('/html/body/div[5]/div/div[2]/div[3]/div[1]')
+    Allow = driver.find_element_by_xpath('/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[2]/div/div[1]/div[2]/div/button/div[2]')
     Allow.click()
 
     # Adding 5 Second Pause
     time.sleep(5)
 
     # Click Allow Again For Editing Drive Contents
-    Allo = driver.find_element_by_xpath('//*[@id="submit_approve_access"]')
+    '''Allo = driver.find_element_by_xpath('//*[@id="submit_approve_access"]')
     Allo.click()
 
     # Adding 5 Second Pause
@@ -281,51 +283,51 @@ def pahedl(bot: Bot, update: Update):
     Confirm = driver.find_element_by_xpath('/html/body/div/form/div/div[2]/center/button[1]')
     Confirm.click()
 
-    # Adding 2 Second Pause
+    # Adding 2 Second Pause'''
     time.sleep(2)
 
     # Clicking Generate Download Link Button
-    for r in range(0, 2):
-        GenerateDownloadLink = driver.find_element_by_xpath('/html/body/div/div/div[2]/form/center/button')
-        GenerateDownloadLink.click()
+    #for r in range(0, 2):
+    GenerateDownloadLink = driver.find_element_by_xpath('//*[@id="down"]')
+    GenerateDownloadLink.click()
 
     # Adding 2 Second Pause
     time.sleep(2)
 
     # Clicking Download File Button To Get Redirected To GDrive Link
-    for s in range(0, 2):
-        DownloadFile = driver.find_element_by_xpath('/html/body/div/div/div[2]/center/button')
-        DownloadFile.click()
+    # for s in range(0, 2):
+    DownloadFile = driver.find_element_by_xpath('/html/body/div[1]/div/div/div/div/div/div/div[2]/a[1]')
+    DownloadFile.click()
 
     # Switching To GDrive Link Page
-    window_after = driver.window_handles[4]
+    window_after = driver.window_handles[2]
     driver.switch_to.window(window_after)
 
     # Adding 10 Second Pause To Load The Page Properly
     time.sleep(10)
 
     # Clicking Download Button To Go The Download File Page
-    GDownload = driver.find_element_by_xpath('/html/body/div[4]/div[3]/div/div[3]/div[2]/div[2]/div[3]')
+    GDownload = driver.find_element_by_xpath('/html/body/div[3]/div[4]/div/div[3]/div[2]/div[2]/div[3]/div')
     GDownload.click()
 
     # Switching To Download File Tab
-    window_after = driver.window_handles[5]
+    window_after = driver.window_handles[3]
     driver.switch_to.window(window_after)
 
     # Adding 10 Second Pause To Load Page Properly
     time.sleep(10)
 
     # Clicking The Final Download Button To Get The Prompt To Save The File & Start Download
-    for t in range(0, 2):
-        GDownloadFinal = driver.find_element_by_xpath('//*[@id="uc-download-link"]')
-        GDownloadFinal.click()
+    # for t in range(0, 2):
+    GDownloadFinal = driver.find_element_by_xpath('//*[@id="uc-download-link"]')
+    GDownloadFinal.click()
 
     # Printing The Total Time Elapsed
     elapsed_time = time.time() - start_time
     print(time.strftime("%H:%M:%S", time.gmtime(elapsed_time)))
 
     # getting downloaded fle
-    rootdir = "./" + str(update.effective_user.id)
+    rootdir = "/app/" + str(update.effective_user.id)
     regex = re.compile(MovieName[0] + '.*')
 
     for root, dirs, files in os.walk(rootdir):
