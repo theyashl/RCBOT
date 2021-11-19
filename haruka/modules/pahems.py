@@ -70,7 +70,10 @@ def pahedl(bot: Bot, update: Update):
         time.sleep(15)
 
         #Clicking Diasagree for coockies
-        WebDriverWait(driver, 1000000).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/button[1]'))).click()
+        try:
+            WebDriverWait(driver, 100).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/button[1]'))).click()
+        except:
+            pass
         #driver.find_element_by_xpath("//button[contains(., 'DISAGREE')]").click()
         # Clicking I Am Not A Robot Button
         Robot = WebDriverWait(driver, 1000000).until(
