@@ -44,6 +44,8 @@ def pahedl(bot: Bot, update: Update):
     nameDiv = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/div')
     cText = nameDiv.text
     vers = cText.split(" MG ")
+    driver.quit()
+    time.sleep(5)
 
     for i in range(len(vers)):
         # vers = "
@@ -54,8 +56,18 @@ def pahedl(bot: Bot, update: Update):
         # "
         ver = ""
         ver = str(vers[i].split(" | ")[0].split("\n")[-1])
-        driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 't')
+        '''driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 't')
         driver.switch_to.window(driver.window_handles[-1])
+        driver.get(MovieLink)'''
+        options = webdriver.FirefoxOptions()
+        options.log.level = "trace"
+        options.add_argument("-remote-debugging-port=9224")
+        options.add_argument("-headless")
+        options.add_argument("-disable-gpu")
+        options.add_argument("-no-sandbox")
+        binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
+        driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'),
+                                   options=options)
         driver.get(MovieLink)
         time.sleep(5)
         for o in range(0, 2):
@@ -122,7 +134,7 @@ def pahedl(bot: Bot, update: Update):
 
         # Clicking Continue Button On Spacetica
         print(driver.title)
-        Con = WebDriverWait(driver, 1000000).until( EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')))
+        Con = WebDriverWait(driver, 1000).until( EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')))
         Con.location_once_scrolled_into_view
         # Con = driver.find_element_by_xpath('/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')
         Con.click()
@@ -130,8 +142,10 @@ def pahedl(bot: Bot, update: Update):
         time.sleep(5)
         print(ver, " : ", driver.current_url)
         res += str(ver) + ': ' + str(driver.current_url) + '\n'
-        driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 'w')
-        driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 'w')
+        driver.quit()
+        time.sleep(5)
+        '''driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 'w')
+        driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 'w')'''
     update.effective_message.reply_text(
             res, parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=False
