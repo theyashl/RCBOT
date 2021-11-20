@@ -49,18 +49,8 @@ def pahedl(bot: Bot, update: Update):
 
     for i in range(len(vers)-1):
         print("Running for ", i, "th round")
-        # vers = "
-        # \n480p x264 | 600 MB\n UTB \n GD \n
-        # \n RCT \n \n \n720p x264 | 1.29 GB\n UTB \n GD \n
-        # \n RCT \n \n \n720p x265 10-Bit | 915 MB\n UTB \n GD \n
-        # \n RCT \n
-        # "
         ver = ""
         ver = str(vers[i].split(" | ")[0].split("\n")[-1])
-        print("ver is set")
-        '''driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 't')
-        driver.switch_to.window(driver.window_handles[-1])
-        driver.get(MovieLink)'''
         options = webdriver.FirefoxOptions()
         options.log.level = "trace"
         options.add_argument("-remote-debugging-port=9224")
@@ -70,20 +60,22 @@ def pahedl(bot: Bot, update: Update):
         binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
         driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'),
                                    options=options)
-        print("Driver is set")
         driver.get(MovieLink)
         print("Getting link")
         time.sleep(5)
-        for o in range(0, 2):
-            print("Finding red button")
-            GoogleDriveLink = WebDriverWait(driver, 100).until(EC.element_to_be_clickable((By.XPATH,'//*[@class="shortc-button small red "]')))
-            GoogleDriveLink.location_once_scrolled_into_view
-            GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')
-            GoogleDriveLink[i].click()
+        try:
+            for o in range(0, 2):
+                print("Finding red button")
+                GoogleDriveLink = WebDriverWait(driver, 100).until(EC.element_to_be_clickable((By.XPATH,'//*[@class="shortc-button small red "]')))
+                GoogleDriveLink.location_once_scrolled_into_view
+                GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')
+                GoogleDriveLink[i].click()
+        except:
+            break
 
         # Switching To The Newly Opened Tab
         print("Finally here!")
-        # Adding 30 Second Pause For Loading The Page
+        # Adding 15 Second Pause For Loading The Page
         time.sleep(15)
 
         #Clicking Diasagree for coockies
@@ -129,17 +121,16 @@ def pahedl(bot: Bot, update: Update):
         driver.switch_to.window(window_after)
         print("On new tab")
         print(driver.title, driver.current_url)
-        '''for i in range(ind):
-            driver.switch_to.window(driver.window_handles[i])
-            driver.close()
-        driver.switch_to.window(driver.window_handles[0])'''
 
-        # Addin 10 Second Pause To Load The Page Properly
-        time.sleep(15)
+        # Addin 5 Second Pause To Load The Page Properly
+        time.sleep(5)
 
         # Clicking Continue Button On Spacetica
-        print(driver.title)
-        Con = WebDriverWait(driver, 1000).until( EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')))
+        try:
+            Con = WebDriverWait(driver, 100).until( EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')))
+        except:
+            print("No Continue Button")
+            break
         Con.location_once_scrolled_into_view
         # Con = driver.find_element_by_xpath('/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')
         Con.click()
@@ -150,10 +141,12 @@ def pahedl(bot: Bot, update: Update):
         driver.quit()
         time.sleep(5)
         print("This round is done!")
-    update.effective_message.reply_text(
+    '''update.effective_message.reply_text(
             res, parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=False
-        )
+        )'''
+    bot.send_message(chat_id=-1001581805288, text=res, parse_mode=ParseMode.MARKDOWN,
+            disable_web_page_preview=True)
 
 
 @run_async
