@@ -48,6 +48,7 @@ def pahedl(bot: Bot, update: Update):
     time.sleep(5)
 
     for i in range(len(vers)):
+        print("Running for ", i, "th round")
         # vers = "
         # \n480p x264 | 600 MB\n UTB \n GD \n
         # \n RCT \n \n \n720p x264 | 1.29 GB\n UTB \n GD \n
@@ -56,6 +57,7 @@ def pahedl(bot: Bot, update: Update):
         # "
         ver = ""
         ver = str(vers[i].split(" | ")[0].split("\n")[-1])
+        print("ver is set")
         '''driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 't')
         driver.switch_to.window(driver.window_handles[-1])
         driver.get(MovieLink)'''
@@ -68,10 +70,13 @@ def pahedl(bot: Bot, update: Update):
         binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
         driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'),
                                    options=options)
+        print("Driver is set")
         driver.get(MovieLink)
+        print("Getting link")
         time.sleep(5)
         for o in range(0, 2):
-            GoogleDriveLink = WebDriverWait(driver, 1000000).until(EC.element_to_be_clickable((By.XPATH,'//*[@class="shortc-button small red "]')))
+            print("Finding red button")
+            GoogleDriveLink = WebDriverWait(driver, 100).until(EC.element_to_be_clickable((By.XPATH,'//*[@class="shortc-button small red "]')))
             GoogleDriveLink.location_once_scrolled_into_view
             GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')
             GoogleDriveLink[i].click()
@@ -144,8 +149,7 @@ def pahedl(bot: Bot, update: Update):
         res += str(ver) + ': ' + str(driver.current_url) + '\n'
         driver.quit()
         time.sleep(5)
-        '''driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 'w')
-        driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 'w')'''
+        print("This round is done!")
     update.effective_message.reply_text(
             res, parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=False
