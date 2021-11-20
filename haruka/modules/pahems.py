@@ -47,7 +47,7 @@ def pahedl(bot: Bot, update: Update):
     driver.quit()
     time.sleep(5)
 
-    for i in range(len(vers)):
+    for i in range(len(vers)-1):
         print("Running for ", i, "th round")
         # vers = "
         # \n480p x264 | 600 MB\n UTB \n GD \n
@@ -146,7 +146,7 @@ def pahedl(bot: Bot, update: Update):
         print("Clicked Continue")
         time.sleep(5)
         print(ver, " : ", driver.current_url)
-        res += str(ver) + ': ' + str(driver.current_url) + '\n'
+        res += '[' + str(ver) + '](' + str(driver.current_url) + ')\n'
         driver.quit()
         time.sleep(5)
         print("This round is done!")
