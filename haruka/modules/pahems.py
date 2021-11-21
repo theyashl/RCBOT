@@ -162,4 +162,4 @@ def clook(bot: Bot, update: Update):
 
 
 LINK_HANDLER = MessageHandler(CustomFilters.has_text, clook)
-dispatcher.add_handler(LINK_HANDLER)
+dispatcher.add_handler(LINK_HANDLER, group=12)
