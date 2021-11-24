@@ -184,7 +184,7 @@ def pahesh(bot: Bot, update: Update):
     print("There are ", len(navTabs), " columns")
     for x in range(len(navTabs)):
         # /html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/ul/li[1]
-        allLi = driver.find_elements_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div['+(x+2)+']/ul/li')
+        allLi = driver.find_elements_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div['+str(x+2)+']/ul/li')
         print("There are ", len(allLi), " rows")
         driver.quit()
         time.sleep(5)
@@ -203,11 +203,11 @@ def pahesh(bot: Bot, update: Update):
             time.sleep(5)
             cLi = WebDriverWait(driver, 100).until(
                 EC.element_to_be_clickable((By.XPATH,
-                                            '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + (
-                                                        x + 2) + ']/ul/li[' + (
+                                            '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(
+                                                        x + 2) + ']/ul/li[' + str(
                                                     y + 1) + ']')))
             cLi.location_once_scrolled_into_view
-            cLi = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div['+(x+2)+']/ul/li['+(y+1)+']')
+            cLi = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div['+str(x+2)+']/ul/li['+str(y+1)+']')
             res += cLi.text + '\n'
             cLi.click()
 
@@ -215,7 +215,7 @@ def pahesh(bot: Bot, update: Update):
             start = 0
             del cLi
             nameDiv = driver.find_element_by_xpath(
-                '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div['+(x+2)+']/div')
+                '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div['+str(x+2)+']/div')
             cText = nameDiv.text
             vers = cText.split(" MG ")
             driver.quit()
@@ -242,11 +242,11 @@ def pahesh(bot: Bot, update: Update):
                 try:
                     print("Finding row button button")
                     cLi = WebDriverWait(driver, 100).until(
-                        EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + (x + 2) + ']/ul/li[' + (
+                        EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(x + 2) + ']/ul/li[' + str(
                                     y + 1) + ']')))
                     cLi.location_once_scrolled_into_view
                     cLi = driver.find_element_by_xpath(
-                        '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + (x + 2) + ']/ul/li[' + (
+                        '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(x + 2) + ']/ul/li[' + str(
                                     y + 1) + ']')
                     cLi.click()
                     for o in range(0, 2):
