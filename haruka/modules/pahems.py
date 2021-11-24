@@ -188,7 +188,7 @@ def pahesh(bot: Bot, update: Update):
         print("There are ", len(allLi), " rows")
         driver.quit()
         time.sleep(5)
-        for y in range(allLi):
+        for y in range(len(allLi)):
             options = webdriver.FirefoxOptions()
             options.log.level = "trace"
             options.add_argument("-remote-debugging-port=9224")
