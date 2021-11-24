@@ -308,14 +308,14 @@ def pahesh(bot: Bot, update: Update):
                 window_after = driver.window_handles[ind]
                 driver.switch_to.window(window_after)
                 print("On new tab")
-                print(driver.title, driver.current_url)
 
-                # Addin 5 Second Pause To Load The Page Properly
-                time.sleep(5)
+                # Addin 30 Second Pause To Load The Page Properly
+                time.sleep(20)
+                print(driver.title, driver.current_url)
 
                 # Clicking Continue Button On Spacetica
                 try:
-                    Con = WebDriverWait(driver, 100).until(EC.element_to_be_clickable(
+                    Con = WebDriverWait(driver, 1000).until(EC.element_to_be_clickable(
                         (By.XPATH, '/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')))
                 except:
                     print("No Continue Button")
