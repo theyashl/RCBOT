@@ -209,7 +209,7 @@ def pahesh(bot: Bot, update: Update):
             cLi.location_once_scrolled_into_view
             cLi = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div['+str(x+2)+']/ul/li['+str(y+1)+']')
             res += cLi.text + '\n'
-            cLi.click()
+            driver.execute_script("arguments[0].click();", cLi)
 
             # code
             start = 0
@@ -248,7 +248,7 @@ def pahesh(bot: Bot, update: Update):
                     cLi = driver.find_element_by_xpath(
                         '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(x + 2) + ']/ul/li[' + str(
                                     y + 1) + ']')
-                    cLi.click()
+                    driver.execute_script("arguments[0].click();", cLi)
                     for o in range(0, 2):
                         print("Finding red button")
                         GoogleDriveLink = WebDriverWait(driver, 100).until(
