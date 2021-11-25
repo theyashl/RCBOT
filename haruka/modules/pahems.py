@@ -285,9 +285,13 @@ def pahesh(bot: Bot, update: Update):
                     pass
                 # driver.find_element_by_xpath("//button[contains(., 'DISAGREE')]").click()
                 # Clicking I Am Not A Robot Button
-                Robot = WebDriverWait(driver, 1000000).until(
-                    EC.element_to_be_clickable(
-                        (By.XPATH, '/html/body/div[2]/div/div[1]/div/form/div/div[2]/center/img')))
+                try:
+                    Robot = WebDriverWait(driver, 100).until(
+                        EC.element_to_be_clickable(
+                            (By.XPATH, '/html/body/div[2]/div/div[1]/div/form/div/div[2]/center/img')))
+                except:
+                    driver.quit()
+                    break
                 Robot.location_once_scrolled_into_view
                 Robot.click()
                 print("Robot Passed")
