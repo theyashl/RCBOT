@@ -221,8 +221,8 @@ def pahesh(bot: Bot, update: Update):
             # code
             start = 0
             del cLi
-            nameDiv = driver.find_element_by_xpath(
-                '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div['+str(x+2)+']/div')
+            nameDiv = driver.find_elements_by_xpath(
+                '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div['+str(x+2)+']/div')[y]
             cText = nameDiv.text
             vers = cText.split(" MG ")
             print(vers[0])
