@@ -249,14 +249,17 @@ def pahesh(bot: Bot, update: Update):
                         '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(x + 2) + ']/ul/li[' + str(
                                     y + 1) + ']')
                     driver.execute_script("arguments[0].click();", cLi)
-                    for o in range(0, 2):
-                        print("Finding red button")
-                        GoogleDriveLink = WebDriverWait(driver, 100).until(
-                            EC.element_to_be_clickable((By.XPATH, '//*[@class="shortc-button small red "]')))
-                        GoogleDriveLink.location_once_scrolled_into_view
-                        GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')
-                        GoogleDriveLink[i].click()
+                    driver.execute_script("arguments[0].click();", cLi)
+                    time.sleep(2)
+                    #for o in range(0, 2):
+                    print("Finding red button")
+                    GoogleDriveLink = WebDriverWait(driver, 100).until(
+                        EC.element_to_be_clickable((By.XPATH, '//*[@class="shortc-button small red "]')))
+                    GoogleDriveLink.location_once_scrolled_into_view
+                    GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')
+                    GoogleDriveLink[i].click()
                 except:
+                    driver.quit()
                     break
 
                 # Switching To The Newly Opened Tab
