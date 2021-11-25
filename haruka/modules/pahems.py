@@ -38,7 +38,7 @@ def pahedl(bot: Bot, update: Update):
     # Getting File Name
     Name = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/h1/span').text
     print("Name: ", Name)
-    res += "[" + str(Name) + "](" + str(driver.current_url) + ') \n'
+    res += '[' + str(Name) + '](' + str(driver.current_url) + ')\n'
 
     #here we go
     nameDiv = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/div')
@@ -174,7 +174,7 @@ def pahesh(bot: Bot, update: Update):
     # Getting File Name
     Name = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/h1/span').text
     print("Name: ", Name)
-    res += "[" + str(Name) + "](" + str(driver.current_url) + ') \n'
+    res += '[' + str(Name) + '](' + str(driver.current_url) + ')\n'
 
     # /html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/ul
     # /html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/ul/li[1]
@@ -264,11 +264,11 @@ def pahesh(bot: Bot, update: Update):
                     print(driver.find_element_by_xpath('//li[@class="current"]').text)
                     #for o in range(0, 2):
                     print("Finding red button")
-                    GoogleDriveLink = WebDriverWait(driver, 100).until(
+                    '''GoogleDriveLink = WebDriverWait(driver, 100).until(
                         EC.element_to_be_clickable((By.XPATH, '//*[@class="shortc-button small red "]')))
-                    GoogleDriveLink.location_once_scrolled_into_view
+                    GoogleDriveLink.location_once_scrolled_into_view'''
                     GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')
-                    GoogleDriveLink[i].click()
+                    GoogleDriveLink[y+i].click()
                 except:
                     driver.quit()
                     break
