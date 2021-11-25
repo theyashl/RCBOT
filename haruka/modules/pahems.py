@@ -190,6 +190,7 @@ def pahesh(bot: Bot, update: Update):
         time.sleep(5)
         button = 0
         for y in range(len(allLi)):
+            print(button)
             options = webdriver.FirefoxOptions()
             options.log.level = "trace"
             options.add_argument("-remote-debugging-port=9224")
@@ -366,8 +367,10 @@ def pahesh(bot: Bot, update: Update):
                 driver.quit()
                 time.sleep(5)
                 if i == len(vers) - 2:
+                    print("this was last round")
                     button = i+1
-                print("This round is done!")
+                    print(button)
+                print("This round is done!", len(vers)-i, "rounds remaining")
 
 
     #here we go
