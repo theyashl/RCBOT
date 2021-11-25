@@ -188,6 +188,7 @@ def pahesh(bot: Bot, update: Update):
         print("There are ", len(allLi), " rows")
         driver.quit()
         time.sleep(5)
+        button = 0
         for y in range(len(allLi)):
             options = webdriver.FirefoxOptions()
             options.log.level = "trace"
@@ -267,8 +268,8 @@ def pahesh(bot: Bot, update: Update):
                     '''GoogleDriveLink = WebDriverWait(driver, 100).until(
                         EC.element_to_be_clickable((By.XPATH, '//*[@class="shortc-button small red "]')))
                     GoogleDriveLink.location_once_scrolled_into_view'''
-                    print("clicking", y+i, "th button")
-                    GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')[y+i]
+                    print("clicking", button+i, "th button")
+                    GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')[button+i]
                     GoogleDriveLink.location_once_scrolled_into_view
                     GoogleDriveLink.click()
                 except:
@@ -363,6 +364,8 @@ def pahesh(bot: Bot, update: Update):
                 res += '[' + str(ver) + '](' + str(Con.get_attribute('href')) + ')\n'
                 driver.quit()
                 time.sleep(5)
+                if i == len(vers) - 2:
+                    button = i+1
                 print("This round is done!")
 
 
