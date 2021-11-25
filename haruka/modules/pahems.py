@@ -237,6 +237,10 @@ def pahesh(bot: Bot, update: Update):
 
             for i in range(start, len(vers) - 1):
                 print("Running for ", i, "th round")
+                if i == len(vers) - 2:
+                    print("this is last round")
+                    button = i+1
+                    print(button)
                 ver = ""
                 ver = str(vers[i].split(" | ")[0].split("\n")[-1])
                 options = webdriver.FirefoxOptions()
@@ -366,10 +370,6 @@ def pahesh(bot: Bot, update: Update):
                 res += '[' + str(ver) + '](' + str(Con.get_attribute('href')) + ')\n'
                 driver.quit()
                 time.sleep(5)
-                if i == len(vers) - 2:
-                    print("this was last round")
-                    button = i+1
-                    print(button)
                 print("This round is done!", len(vers)-i, "rounds remaining")
 
 
