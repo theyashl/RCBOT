@@ -272,6 +272,7 @@ def pahesh(bot: Bot, update: Update):
                     GoogleDriveLink.location_once_scrolled_into_view
                     GoogleDriveLink.click()
                 except:
+                    print("Mega button not found.:/")
                     driver.quit()
                     break
 
