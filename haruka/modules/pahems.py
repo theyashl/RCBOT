@@ -222,6 +222,7 @@ def pahesh(bot: Bot, update: Update):
             time.sleep(5)
             if '480p' in vers[0]:
                 start = 1
+            restart = 0
 
             for i in range(start, len(vers) - 1):
                 print("Running for ", i, "th round")
@@ -249,14 +250,15 @@ def pahesh(bot: Bot, update: Update):
                         '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(x + 2) + ']/ul/li[' + str(
                                     y + 1) + ']')
                     driver.execute_script("arguments[0].click();", cLi)
-                    for o in range(0, 2):
-                        print("Finding red button")
-                        GoogleDriveLink = WebDriverWait(driver, 100).until(
-                            EC.element_to_be_clickable((By.XPATH, '//*[@class="shortc-button small red "]')))
-                        GoogleDriveLink.location_once_scrolled_into_view
-                        GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')
-                        GoogleDriveLink[i].click()
+                    #for o in range(0, 2):
+                    print("Finding red button")
+                    GoogleDriveLink = WebDriverWait(driver, 100).until(
+                        EC.element_to_be_clickable((By.XPATH, '//*[@class="shortc-button small red "]')))
+                    GoogleDriveLink.location_once_scrolled_into_view
+                    GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')
+                    GoogleDriveLink[i].click()
                 except:
+                    driver.quit()
                     break
 
                 # Switching To The Newly Opened Tab
@@ -314,12 +316,25 @@ def pahesh(bot: Bot, update: Update):
                 print(driver.title, driver.current_url)
 
                 # Clicking Continue Button On Spacetica
+                # /html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a
+                # /html/body/section/div/div/div/div[3]/a
                 try:
-                    Con = WebDriverWait(driver, 1000).until(EC.element_to_be_clickable(
-                        (By.XPATH, '/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')))
+                    if "Linegee" in driver.title:
+                        Con = WebDriverWait(driver, 100).until(EC.element_to_be_clickable(
+                            (By.XPATH, '/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')))
+                    else:
+                        Con = WebDriverWait(driver, 100).until(EC.element_to_be_clickable(
+                            (By.XPATH, '/html/body/section/div/div/div/div[3]/a')
+                        ))
                 except:
                     print("No Continue Button")
-                    break
+                    driver.quit()
+                    if restart == 3:
+                        break
+                    else:
+                        i -= 1
+                        restart += 1
+                        continue
                 Con.location_once_scrolled_into_view
                 # Con = driver.find_element_by_xpath('/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')
                 Con.click()
