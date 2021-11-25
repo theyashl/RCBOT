@@ -211,7 +211,12 @@ def pahesh(bot: Bot, update: Update):
             print(cLi.text)
             res += cLi.text + '\n'
             driver.execute_script("arguments[0].click();", cLi)
-            driver.execute_script("arguments[0].click();", cLi)
+            #driver.execute_script("arguments[0].click();", cLi)
+            # /html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/ul/li[2]
+            try:
+                print(driver.find_element_by_xpath('//li[@class="current"]').text)
+            except:
+                pass
 
             # code
             start = 0
@@ -220,8 +225,11 @@ def pahesh(bot: Bot, update: Update):
                 '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div['+str(x+2)+']/div')
             cText = nameDiv.text
             vers = cText.split(" MG ")
+            print(vers[0])
             driver.quit()
             time.sleep(5)
+            if len(vers) == 1:
+                break
             if '480p' in vers[0]:
                 start = 1
             restart = 0
@@ -340,11 +348,11 @@ def pahesh(bot: Bot, update: Update):
                         continue
                 Con.location_once_scrolled_into_view
                 # Con = driver.find_element_by_xpath('/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')
-                Con.click()
+                #Con.click()
                 print("Clicked Continue")
                 time.sleep(5)
-                print(ver, " : ", driver.current_url)
-                res += '[' + str(ver) + '](' + str(driver.current_url) + ')\n'
+                print(ver, " : ", Con.get_attribute('href'))
+                res += '[' + str(ver) + '](' + str(Con.get_attribute('href')) + ')\n'
                 driver.quit()
                 time.sleep(5)
                 print("This round is done!")
