@@ -250,25 +250,26 @@ def pahesh(bot: Bot, update: Update):
                 driver.get(MovieLink)
                 print("Getting link")
                 time.sleep(5)
+                print(button)
+                print("Finding row button button")
+                cLi = WebDriverWait(driver, 100).until(
+                    EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(x + 2) + ']/ul/li[' + str(
+                                y + 1) + ']')))
+                cLi.location_once_scrolled_into_view
+                cLi = driver.find_element_by_xpath(
+                    '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(x + 2) + ']/ul/li[' + str(
+                                y + 1) + ']')
+                cLi.click()
+                driver.execute_script("arguments[0].click();", cLi)
+                driver.execute_script("arguments[0].click();", cLi)
+                print(driver.find_element_by_xpath('//li[@class="current"]').text)
+                #for o in range(0, 2):
+                print("Finding red button")
+                '''GoogleDriveLink = WebDriverWait(driver, 100).until(
+                    EC.element_to_be_clickable((By.XPATH, '//*[@class="shortc-button small red "]')))
+                GoogleDriveLink.location_once_scrolled_into_view'''
+                print("clicking", button+i, "th button")
                 try:
-                    print("Finding row button button")
-                    cLi = WebDriverWait(driver, 100).until(
-                        EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(x + 2) + ']/ul/li[' + str(
-                                    y + 1) + ']')))
-                    cLi.location_once_scrolled_into_view
-                    cLi = driver.find_element_by_xpath(
-                        '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(x + 2) + ']/ul/li[' + str(
-                                    y + 1) + ']')
-                    cLi.click()
-                    driver.execute_script("arguments[0].click();", cLi)
-                    driver.execute_script("arguments[0].click();", cLi)
-                    print(driver.find_element_by_xpath('//li[@class="current"]').text)
-                    #for o in range(0, 2):
-                    print("Finding red button")
-                    '''GoogleDriveLink = WebDriverWait(driver, 100).until(
-                        EC.element_to_be_clickable((By.XPATH, '//*[@class="shortc-button small red "]')))
-                    GoogleDriveLink.location_once_scrolled_into_view'''
-                    print("clicking", button+i, "th button")
                     GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')[button+i]
                     GoogleDriveLink.location_once_scrolled_into_view
                     GoogleDriveLink.click()
@@ -370,12 +371,12 @@ def pahesh(bot: Bot, update: Update):
 
 
     #here we go
-    '''update.effective_message.reply_text(
+    update.effective_message.reply_text(
             res, parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=False
-        )'''
-    bot.send_message(chat_id=-1001581805288, text=res, parse_mode=ParseMode.MARKDOWN,
-            disable_web_page_preview=False)
+        )
+    '''bot.send_message(chat_id=-1001581805288, text=res, parse_mode=ParseMode.MARKDOWN,
+            disable_web_page_preview=False)'''
 
 
 @run_async
