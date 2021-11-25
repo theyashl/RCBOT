@@ -174,7 +174,7 @@ def pahesh(bot: Bot, update: Update):
     # Getting File Name
     Name = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/h1/span').text
     print("Name: ", Name)
-    res += '[' + str(Name) + '](' + str(driver.current_url) + ')\n'
+    res += str(Name) + '(' + str(driver.current_url) + ')\n'
 
     # /html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/ul
     # /html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/ul/li[1]
@@ -267,8 +267,10 @@ def pahesh(bot: Bot, update: Update):
                     '''GoogleDriveLink = WebDriverWait(driver, 100).until(
                         EC.element_to_be_clickable((By.XPATH, '//*[@class="shortc-button small red "]')))
                     GoogleDriveLink.location_once_scrolled_into_view'''
-                    GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')
-                    GoogleDriveLink[y+i].click()
+                    print("clicking", y+i, "th button")
+                    GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')[y+i]
+                    GoogleDriveLink.location_once_scrolled_into_view
+                    GoogleDriveLink.click()
                 except:
                     driver.quit()
                     break
