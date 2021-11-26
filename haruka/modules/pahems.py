@@ -269,12 +269,13 @@ def pahesh(bot: Bot, update: Update):
                 start = 1
             restart = 0
 
-            for i in range(start, len(vers) - 1):
+            for i in range(start, len(vers)):
                 print("Running for ", i, "th round")
-                if i == len(vers) - 2:
+                if i == len(vers) - 1:
                     print("this is last round")
                     button += len(vers) - 1
                     print(button)
+                    break
                 ver = ""
                 ver = str(vers[i].split(" | ")[0].split("\n")[-1])
                 '''options = webdriver.FirefoxOptions()
