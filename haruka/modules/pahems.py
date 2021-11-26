@@ -302,7 +302,7 @@ def pahesh(bot: Bot, update: Update):
                 cLi.click()
                 driver.execute_script("arguments[0].click();", cLi)
                 driver.execute_script("arguments[0].click();", cLi)'''
-                print(driver.find_element_by_xpath('//li[@class="current"]').text)
+                # print(driver.find_element_by_xpath('//li[@class="current"]').text)
                 # for o in range(0, 2):
                 print("Finding red button")
                 '''GoogleDriveLink = WebDriverWait(driver, 100).until(
