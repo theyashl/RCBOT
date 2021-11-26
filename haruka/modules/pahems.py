@@ -264,7 +264,7 @@ def pahesh(bot: Bot, update: Update):
             if '480p' in vers[0]:
                 if len(vers) == 2:
                     button = 1
-                    break
+                    continue
                 start = 1
             restart = 0
 
