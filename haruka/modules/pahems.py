@@ -67,7 +67,7 @@ def getFromInter(link: str, driver):
             break
 
     # Switching To The Newly Opened Tab linegee.net
-    window_after = driver.window_handles[ind]
+    window_after = driver.window_handles[-1]
     driver.switch_to.window(window_after)
     print("On new tab")
     print(driver.title, driver.current_url)
