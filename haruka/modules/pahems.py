@@ -92,7 +92,7 @@ def getFromInter(link: str, driver):
     # Con.click()
     print("Clicked Continue")
     megaLink = Con.get_attribute('href')
-    print(ver, " : ", megaLink)
+    print(megaLink)
     driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 'w')
     driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 'w')
     return megaLink
