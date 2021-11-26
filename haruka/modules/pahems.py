@@ -12,10 +12,90 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import os
 
+
+def getFromInter(link: str, driver):
+    megaLink = ""
+    NewTab = driver.find_element_by_tag_name('body')
+    NewTab.send_keys(Keys.CONTROL + 't')
+    # Switching To The New Tab
+    window_after = driver.window_handles[-1]
+    driver.switch_to.window(window_after)
+    driver.get(link)
+    # Adding 15 Second Pause For Loading The Page
+    time.sleep(15)
+    # Switching To The Newly Opened Tab
+    print("Finally here!", driver.current_url)
+
+    # Clicking Diasagree for coockies
+    try:
+        WebDriverWait(driver, 100).until(
+            EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/button[1]'))).click()
+    except:
+        pass
+    # driver.find_element_by_xpath("//button[contains(., 'DISAGREE')]").click()
+    # Clicking I Am Not A Robot Button
+    Robot = WebDriverWait(driver, 100).until(
+        EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div[1]/div/form/div/div[2]/center/img')))
+    Robot.location_once_scrolled_into_view
+    Robot.click()
+    print("Robot Passed")
+
+    # Adding 15 Second Pause For Loading The Page
+    time.sleep(15)
+
+    # Clicking Generate Link Button
+    print("Generating Link")
+    GenerateLink = driver.find_element_by_xpath('//*[@id="generater"]')
+    GenerateLink.click()
+
+    # Adding 15 Second Pause For Loading The Page
+    time.sleep(15)
+
+    # Clicking Download To Get Redirected To Spacetica
+    print("Clicking Download button!:/")
+    Down = driver.find_element_by_xpath('//img[@id="showlink"]')
+    Down.click()
+
+    # Adding 15 Second Pause For Loading The Page
+    time.sleep(15)
+
+    ind = 1
+    for i in range(1, len(driver.window_handles)):
+        driver.switch_to.window(driver.window_handles[i])
+        if "linegee.net" in str(driver.current_url):
+            ind = i
+
+    # Switching To The Newly Opened Tab linegee.net
+    window_after = driver.window_handles[ind]
+    driver.switch_to.window(window_after)
+    print("On new tab")
+    print(driver.title, driver.current_url)
+
+    # Addin 5 Second Pause To Load The Page Properly
+    time.sleep(5)
+
+    # Clicking Continue Button On Spacetica
+    try:
+        Con = WebDriverWait(driver, 100).until(EC.element_to_be_clickable(
+            (By.XPATH, '/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')))
+    except:
+        print("No Continue Button")
+        return "NA"
+    Con.location_once_scrolled_into_view
+    # Con = driver.find_element_by_xpath('/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')
+    # Con.click()
+    print("Clicked Continue")
+    megaLink = Con.get_attribute('href')
+    print(ver, " : ", megaLink)
+    driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 'w')
+    driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 'w')
+    return megaLink
+
+
 # CUST_FILTER_HANDLER = MessageHandler(CustomFilters.has_text, reply_filter)
 def pahedl(bot: Bot, update: Update):
     msg = update.effective_message.text
-    MovieLink = 'https://pahe.ph/'+str(msg.split('https://pahe.ph/')[-1])
+    MovieLink = 'https://pahe.ph/' + str(msg.split('https://pahe.ph/')[-1])
 
     # Printing The Name Of The Movie You Want To Download
     print("\n" + 'Getting link For ' + str(MovieLink) + ' To Download')
@@ -29,7 +109,8 @@ def pahedl(bot: Bot, update: Update):
     options.add_argument("-no-sandbox")
 
     binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
-    driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'), options=options)
+    driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'),
+                               options=options)
     driver.get(MovieLink)
     time.sleep(5)
     print(driver.title)
@@ -40,18 +121,18 @@ def pahedl(bot: Bot, update: Update):
     print("Name: ", Name)
     res += '[' + str(Name) + '](' + str(driver.current_url) + ')\n'
 
-    #here we go
+    # here we go
     nameDiv = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/div')
     cText = nameDiv.text
     vers = cText.split(" MG ")
-    driver.quit()
-    time.sleep(5)
+    # driver.quit()
+    # time.sleep(5)
 
-    for i in range(len(vers)-1):
+    for i in range(len(vers) - 1):
         print("Running for ", i, "th round")
         ver = ""
         ver = str(vers[i].split(" | ")[0].split("\n")[-1])
-        options = webdriver.FirefoxOptions()
+        '''options = webdriver.FirefoxOptions()
         options.log.level = "trace"
         options.add_argument("-remote-debugging-port=9224")
         options.add_argument("-headless")
@@ -62,96 +143,37 @@ def pahedl(bot: Bot, update: Update):
                                    options=options)
         driver.get(MovieLink)
         print("Getting link")
-        time.sleep(5)
+        time.sleep(5)'''
         try:
             for o in range(0, 2):
                 print("Finding red button")
-                GoogleDriveLink = WebDriverWait(driver, 100).until(EC.element_to_be_clickable((By.XPATH,'//*[@class="shortc-button small red "]')))
+                GoogleDriveLink = WebDriverWait(driver, 100).until(
+                    EC.element_to_be_clickable((By.XPATH, '//*[@class="shortc-button small red "]')))
                 GoogleDriveLink.location_once_scrolled_into_view
                 GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')
-                GoogleDriveLink[i].click()
+                # GoogleDriveLink[i].click()
+            mLink = getFromInter(GoogleDriveLink[i].get_attribute('href'), driver)
+            print("Back on", driver.current_url)
+            if mLink == "NA":
+                raise Exception('NO MEGA LINK')
         except:
             break
 
-        # Switching To The Newly Opened Tab
-        print("Finally here!")
-        # Adding 15 Second Pause For Loading The Page
-        time.sleep(15)
-
-        #Clicking Diasagree for coockies
-        try:
-            WebDriverWait(driver, 100).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/button[1]'))).click()
-        except:
-            pass
-        #driver.find_element_by_xpath("//button[contains(., 'DISAGREE')]").click()
-        # Clicking I Am Not A Robot Button
-        Robot = WebDriverWait(driver, 1000000).until(
-            EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div[1]/div/form/div/div[2]/center/img')))
-        Robot.location_once_scrolled_into_view
-        Robot.click()
-        print("Robot Passed")
-
-        # Adding 15 Second Pause For Loading The Page
-        time.sleep(15)
-
-        # Clicking Generate Link Button
-        print("Generating Link")
-        GenerateLink = driver.find_element_by_xpath('//*[@id="generater"]')
-        GenerateLink.click()
-
-        # Adding 15 Second Pause For Loading The Page
-        time.sleep(15)
-
-        # Clicking Download To Get Redirected To Spacetica
-        print("Clicking Download button!:/")
-        Down = driver.find_element_by_xpath('//img[@id="showlink"]')
-        Down.click()
-
-        # Adding 15 Second Pause For Loading The Page
-        time.sleep(15)
-
-        ind = 1
-        for i in range(1, len(driver.window_handles)):
-            driver.switch_to.window(driver.window_handles[i])
-            if "linegee.net" in str(driver.current_url):
-                ind = i
-
-        # Switching To The Newly Opened Tab linegee.net
-        window_after = driver.window_handles[ind]
-        driver.switch_to.window(window_after)
-        print("On new tab")
-        print(driver.title, driver.current_url)
-
-        # Addin 5 Second Pause To Load The Page Properly
-        time.sleep(5)
-
-        # Clicking Continue Button On Spacetica
-        try:
-            Con = WebDriverWait(driver, 100).until( EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')))
-        except:
-            print("No Continue Button")
-            break
-        Con.location_once_scrolled_into_view
-        # Con = driver.find_element_by_xpath('/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')
-        Con.click()
-        print("Clicked Continue")
-        time.sleep(5)
-        print(ver, " : ", driver.current_url)
-        res += '[' + str(ver) + '](' + str(driver.current_url) + ')\n'
-        driver.quit()
-        time.sleep(5)
+        res += '[' + str(ver) + '](' + str(mLink) + ')\n'
+        # driver.quit()
+        # time.sleep(5)
         print("This round is done!")
     '''update.effective_message.reply_text(
             res, parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=False
         )'''
     bot.send_message(chat_id=-1001581805288, text=res, parse_mode=ParseMode.MARKDOWN,
-            disable_web_page_preview=False)
+                     disable_web_page_preview=False)
 
 
 def pahesh(bot: Bot, update: Update):
     msg = update.effective_message.text
-    MovieLink = 'https://pahe.ph/'+str(msg.split('https://pahe.ph/')[-1])
+    MovieLink = 'https://pahe.ph/' + str(msg.split('https://pahe.ph/')[-1])
 
     # Printing The Name Of The Movie You Want To Download
     print("\n" + 'Getting link For ' + str(MovieLink) + ' To Download')
@@ -165,7 +187,8 @@ def pahesh(bot: Bot, update: Update):
     options.add_argument("-no-sandbox")
 
     binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
-    driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'), options=options)
+    driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'),
+                               options=options)
     driver.get(MovieLink)
     time.sleep(5)
     print(driver.title)
@@ -184,14 +207,15 @@ def pahesh(bot: Bot, update: Update):
     print("There are ", len(navTabs), " columns")
     for x in range(len(navTabs)):
         # /html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/ul/li[1]
-        allLi = driver.find_elements_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div['+str(x+2)+']/ul/li')
+        allLi = driver.find_elements_by_xpath(
+            '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(x + 2) + ']/ul/li')
         print("There are ", len(allLi), " rows")
-        driver.quit()
-        time.sleep(5)
+        # driver.quit()
+        # time.sleep(5)
         button = 0
         for y in range(len(allLi)):
             print(button)
-            options = webdriver.FirefoxOptions()
+            '''options = webdriver.FirefoxOptions()
             options.log.level = "trace"
             options.add_argument("-remote-debugging-port=9224")
             options.add_argument("-headless")
@@ -202,19 +226,21 @@ def pahesh(bot: Bot, update: Update):
                                        options=options)
             driver.get(MovieLink)
             print("Getting link")
-            time.sleep(5)
+            time.sleep(5)'''
             cLi = WebDriverWait(driver, 100).until(
                 EC.element_to_be_clickable((By.XPATH,
                                             '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(
-                                                        x + 2) + ']/ul/li[' + str(
-                                                    y + 1) + ']')))
+                                                x + 2) + ']/ul/li[' + str(
+                                                y + 1) + ']')))
             cLi.location_once_scrolled_into_view
-            cLi = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div['+str(x+2)+']/ul/li['+str(y+1)+']')
+            cLi = driver.find_element_by_xpath(
+                '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(x + 2) + ']/ul/li[' + str(
+                    y + 1) + ']')
             print(cLi.text)
             res += cLi.text + '\n'
             cLi.click()
             driver.execute_script("arguments[0].click();", cLi)
-            #driver.execute_script("arguments[0].click();", cLi)
+            # driver.execute_script("arguments[0].click();", cLi)
             # /html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/ul/li[2]
             print(driver.find_element_by_xpath('//li[@class="current"]').text)
 
@@ -223,12 +249,12 @@ def pahesh(bot: Bot, update: Update):
             del cLi
             print("getting division text")
             nameDiv = driver.find_elements_by_xpath(
-                '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div['+str(x+2)+']/div')[y]
+                '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(x + 2) + ']/div')[y]
             cText = nameDiv.text
             vers = cText.split(" MG ")
             print(vers[0])
-            driver.quit()
-            time.sleep(5)
+            # driver.quit()
+            # time.sleep(5)
             if len(vers) == 1:
                 break
             if '480p' in vers[0]:
@@ -239,11 +265,11 @@ def pahesh(bot: Bot, update: Update):
                 print("Running for ", i, "th round")
                 if i == len(vers) - 2:
                     print("this is last round")
-                    button = i+1
+                    button = i + 1
                     print(button)
                 ver = ""
                 ver = str(vers[i].split(" | ")[0].split("\n")[-1])
-                options = webdriver.FirefoxOptions()
+                '''options = webdriver.FirefoxOptions()
                 options.log.level = "trace"
                 options.add_argument("-remote-debugging-port=9224")
                 options.add_argument("-headless")
@@ -254,130 +280,54 @@ def pahesh(bot: Bot, update: Update):
                                            options=options)
                 driver.get(MovieLink)
                 print("Getting link")
-                time.sleep(5)
+                time.sleep(5)'''
                 print(button)
-                print("Finding row button button")
+                '''print("Finding row button button")
                 cLi = WebDriverWait(driver, 100).until(
-                    EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(x + 2) + ']/ul/li[' + str(
-                                y + 1) + ']')))
+                    EC.element_to_be_clickable((By.XPATH,
+                                                '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(
+                                                    x + 2) + ']/ul/li[' + str(
+                                                    y + 1) + ']')))
                 cLi.location_once_scrolled_into_view
                 cLi = driver.find_element_by_xpath(
-                    '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(x + 2) + ']/ul/li[' + str(
-                                y + 1) + ']')
+                    '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(
+                        x + 2) + ']/ul/li[' + str(
+                        y + 1) + ']')
                 cLi.click()
                 driver.execute_script("arguments[0].click();", cLi)
-                driver.execute_script("arguments[0].click();", cLi)
+                driver.execute_script("arguments[0].click();", cLi)'''
                 print(driver.find_element_by_xpath('//li[@class="current"]').text)
-                #for o in range(0, 2):
+                # for o in range(0, 2):
                 print("Finding red button")
                 '''GoogleDriveLink = WebDriverWait(driver, 100).until(
                     EC.element_to_be_clickable((By.XPATH, '//*[@class="shortc-button small red "]')))
                 GoogleDriveLink.location_once_scrolled_into_view'''
-                print("clicking", button+i, "th button")
+                print("clicking", button + i, "th button")
                 try:
-                    GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')[button+i]
+                    GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')[
+                        button + i]
                     GoogleDriveLink.location_once_scrolled_into_view
-                    GoogleDriveLink.click()
+                    # GoogleDriveLink.click()
+                    mLink = getFromInter(GoogleDriveLink.get_attribute('href'), driver)
+                    print("Back on", driver.current_url)
+                    if mLink == "NA":
+                        raise Exception('NO Cont button')
                 except:
                     print("Mega button not found.:/")
-                    driver.quit()
+                    # driver.quit()
                     break
 
-                # Switching To The Newly Opened Tab
-                print("Finally here!")
-                # Adding 15 Second Pause For Loading The Page
-                time.sleep(15)
+                print(ver, " : ", mLink)
+                res += '[' + str(ver) + '](' + str(mLink) + ')\n'
+                # driver.quit()
+                # time.sleep(5)
+                print("This round is done!")
 
-                # Clicking Diasagree for coockies
-                try:
-                    WebDriverWait(driver, 100).until(EC.element_to_be_clickable(
-                        (By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/button[1]'))).click()
-                except:
-                    pass
-                # driver.find_element_by_xpath("//button[contains(., 'DISAGREE')]").click()
-                # Clicking I Am Not A Robot Button
-                try:
-                    Robot = WebDriverWait(driver, 100).until(
-                        EC.element_to_be_clickable(
-                            (By.XPATH, '/html/body/div[2]/div/div[1]/div/form/div/div[2]/center/img')))
-                except:
-                    driver.quit()
-                    break
-                Robot.location_once_scrolled_into_view
-                Robot.click()
-                print("Robot Passed")
-
-                # Adding 15 Second Pause For Loading The Page
-                time.sleep(15)
-
-                # Clicking Generate Link Button
-                print("Generating Link")
-                GenerateLink = driver.find_element_by_xpath('//*[@id="generater"]')
-                GenerateLink.click()
-
-                # Adding 15 Second Pause For Loading The Page
-                time.sleep(15)
-
-                # Clicking Download To Get Redirected To Spacetica
-                print("Clicking Download button!:/")
-                Down = driver.find_element_by_xpath('//img[@id="showlink"]')
-                Down.click()
-
-                # Adding 15 Second Pause For Loading The Page
-                time.sleep(15)
-
-                ind = 1
-                for i in range(1, len(driver.window_handles)):
-                    driver.switch_to.window(driver.window_handles[i])
-                    if "linegee.net" in str(driver.current_url):
-                        ind = i
-
-                # Switching To The Newly Opened Tab linegee.net
-                window_after = driver.window_handles[ind]
-                driver.switch_to.window(window_after)
-                print("On new tab")
-
-                # Addin 30 Second Pause To Load The Page Properly
-                time.sleep(20)
-                print(driver.title, driver.current_url)
-
-                # Clicking Continue Button On Spacetica
-                # /html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a
-                # /html/body/section/div/div/div/div[3]/a
-                try:
-                    if "Linegee" in driver.title:
-                        Con = WebDriverWait(driver, 100).until(EC.element_to_be_clickable(
-                            (By.XPATH, '/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')))
-                    else:
-                        Con = WebDriverWait(driver, 100).until(EC.element_to_be_clickable(
-                            (By.XPATH, '/html/body/section/div/div/div/div[3]/a')
-                        ))
-                except:
-                    print("No Continue Button")
-                    driver.quit()
-                    if restart == 3:
-                        break
-                    else:
-                        i -= 1
-                        restart += 1
-                        continue
-                Con.location_once_scrolled_into_view
-                # Con = driver.find_element_by_xpath('/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')
-                #Con.click()
-                print("Clicked Continue")
-                time.sleep(5)
-                print(ver, " : ", Con.get_attribute('href'))
-                res += '[' + str(ver) + '](' + str(Con.get_attribute('href')) + ')\n'
-                driver.quit()
-                time.sleep(5)
-                print("This round is done!", len(vers)-i, "rounds remaining")
-
-
-    #here we go
+    # here we go
     update.effective_message.reply_text(
-            res, parse_mode=ParseMode.MARKDOWN,
-            disable_web_page_preview=False
-        )
+        res, parse_mode=ParseMode.MARKDOWN,
+        disable_web_page_preview=False
+    )
     '''bot.send_message(chat_id=-1001581805288, text=res, parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=False)'''
 
