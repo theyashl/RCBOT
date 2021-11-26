@@ -93,8 +93,6 @@ def getFromInter(link: str, driver):
     print("Clicked Continue")
     megaLink = Con.get_attribute('href')
     print(megaLink)
-    driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 'w')
-    driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 'w')
     return megaLink
 
 
@@ -318,7 +316,6 @@ def pahesh(bot: Bot, update: Update):
                     GoogleDriveLink.location_once_scrolled_into_view
                     # GoogleDriveLink.click()
                     mLink = getFromInter(GoogleDriveLink.get_attribute('href'), driver)
-                    print("Back on", driver.current_url)
                     if mLink == "NA":
                         raise Exception('NO Cont button')
                 except:
@@ -327,6 +324,9 @@ def pahesh(bot: Bot, update: Update):
                     break
 
                 print(ver, " : ", mLink)
+                while "pahe.ph" not in driver.current_url:
+                    driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 'w')
+                print("Back on", driver.current_url)
                 res += '[' + str(ver) + '](' + str(mLink) + ')\n'
                 # driver.quit()
                 # time.sleep(5)
