@@ -28,7 +28,7 @@ def getFromInter(link: str, driver):
 
     # Clicking Diasagree for coockies
     try:
-        WebDriverWait(driver, 100).until(
+        WebDriverWait(driver, 30).until(
             EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/button[1]'))).click()
     except:
         pass
@@ -78,10 +78,10 @@ def getFromInter(link: str, driver):
     # Clicking Continue Button On Spacetica
     try:
         if "Linegee" in driver.title:
-            Con = WebDriverWait(driver, 100).until(EC.element_to_be_clickable(
+            Con = WebDriverWait(driver, 150).until(EC.element_to_be_clickable(
                 (By.XPATH, '/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')))
         else:
-            Con = WebDriverWait(driver, 100).until(EC.element_to_be_clickable(
+            Con = WebDriverWait(driver, 150).until(EC.element_to_be_clickable(
                 (By.XPATH, '/html/body/section/div/div/div/div[3]/a')
             ))
     except:
@@ -171,6 +171,7 @@ def pahedl(bot: Bot, update: Update):
             res, parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=False
         )'''
+    driver.quit()
     bot.send_message(chat_id=-1001581805288, text=res, parse_mode=ParseMode.MARKDOWN,
                      disable_web_page_preview=False)
 
@@ -337,6 +338,7 @@ def pahesh(bot: Bot, update: Update):
                 print("This round is done!")
 
     # here we go
+    driver.quit()
     update.effective_message.reply_text(
         res, parse_mode=ParseMode.MARKDOWN,
         disable_web_page_preview=False
