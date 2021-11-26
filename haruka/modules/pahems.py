@@ -76,8 +76,13 @@ def getFromInter(link: str, driver):
 
     # Clicking Continue Button On Spacetica
     try:
-        Con = WebDriverWait(driver, 100).until(EC.element_to_be_clickable(
-            (By.XPATH, '/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')))
+        if "Linegee" in driver.title:
+            Con = WebDriverWait(driver, 100).until(EC.element_to_be_clickable(
+                (By.XPATH, '/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')))
+        else:
+            Con = WebDriverWait(driver, 100).until(EC.element_to_be_clickable(
+                (By.XPATH, '/html/body/section/div/div/div/div[3]/a')
+            ))
     except:
         print("No Continue Button")
         return "NA"
@@ -197,7 +202,7 @@ def pahesh(bot: Bot, update: Update):
     # Getting File Name
     Name = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/h1/span').text
     print("Name: ", Name)
-    res += str(Name) + '(' + str(driver.current_url) + ')\n'
+    res += '[' + str(Name) + '](' + str(driver.current_url) + ')\n'
 
     # /html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/ul
     # /html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/ul/li[1]
