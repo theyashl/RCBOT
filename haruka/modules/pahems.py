@@ -264,6 +264,8 @@ def pahesh(bot: Bot, update: Update):
             if len(vers) == 1:
                 break
             if '480p' in vers[0]:
+                if len(vers) == 2:
+                    button = 1
                 start = 1
             restart = 0
 
@@ -271,7 +273,7 @@ def pahesh(bot: Bot, update: Update):
                 print("Running for ", i, "th round")
                 if i == len(vers) - 2:
                     print("this is last round")
-                    button = len(vers) - 1
+                    button += len(vers) - 1
                     print(button)
                 ver = ""
                 ver = str(vers[i].split(" | ")[0].split("\n")[-1])
