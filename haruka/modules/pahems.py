@@ -62,8 +62,9 @@ def getFromInter(link: str, driver):
     ind = 1
     for i in range(1, len(driver.window_handles)):
         driver.switch_to.window(driver.window_handles[i])
-        if "linegee.net" in str(driver.current_url):
+        if "linegee.net" in str(driver.current_url) or "Spacetica" in str(driver.current_url):
             ind = i
+            break
 
     # Switching To The Newly Opened Tab linegee.net
     window_after = driver.window_handles[ind]
