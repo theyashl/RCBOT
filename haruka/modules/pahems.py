@@ -325,7 +325,10 @@ def pahesh(bot: Bot, update: Update):
 
                 print(ver, " : ", mLink)
                 while "pahe.ph" not in driver.current_url:
-                    driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 'w')
+                    print(driver.current_url)
+                    # driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 'w')
+                    driver.close()
+                    driver.switch_to.window(driver.window_handles[-1])
                 print("Back on", driver.current_url)
                 res += '[' + str(ver) + '](' + str(mLink) + ')\n'
                 # driver.quit()
