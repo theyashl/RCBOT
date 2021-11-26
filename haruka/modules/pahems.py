@@ -271,7 +271,7 @@ def pahesh(bot: Bot, update: Update):
                 print("Running for ", i, "th round")
                 if i == len(vers) - 2:
                     print("this is last round")
-                    button = i + 1
+                    button = len(vers) - 1
                     print(button)
                 ver = ""
                 ver = str(vers[i].split(" | ")[0].split("\n")[-1])
