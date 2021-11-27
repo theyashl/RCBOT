@@ -60,10 +60,11 @@ def getFromInter(link: str, driver):
     time.sleep(15)
 
     ind = -1
-    for i in range(1, len(driver.window_handles)):
+    print(len(driver.window_handles))
+    for i in range(0, len(driver.window_handles)):
         driver.switch_to.window(driver.window_handles[i])
         print("checking", driver.current_url)
-        if "linegee.net" in str(driver.current_url) or "Spacetica" in str(driver.current_url):
+        if "linegee.net" in str(driver.current_url) or "spacetica.com" in str(driver.current_url):
             ind = i
             print("ind", ind)
             break
