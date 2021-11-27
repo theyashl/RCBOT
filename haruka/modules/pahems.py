@@ -70,10 +70,10 @@ def getFromInter(link: str, driver):
     window_after = driver.window_handles[-1]
     driver.switch_to.window(window_after)
     print("On new tab")
-    print(driver.title, driver.current_url)
 
     # Addin 5 Second Pause To Load The Page Properly
     time.sleep(5)
+    print(driver.title, driver.current_url)
 
     # Clicking Continue Button On Spacetica
     try:
@@ -90,6 +90,8 @@ def getFromInter(link: str, driver):
             driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 't')
             driver.switch_to.window(driver.window_handles[-1])
             driver.get(rLink)
+            time.sleep(5)
+            print(driver.title, driver.current_url)
             del rLink
             Con = WebDriverWait(driver, 100).until(EC.element_to_be_clickable(
                 (By.XPATH, '/html/body/section/div/div/div/div[3]/a')
