@@ -15,6 +15,7 @@ import os
 
 def getFromInter(link: str):
     megaLink = ""
+    print("Starting new driver")
     options = webdriver.FirefoxOptions()
     options.log.level = "trace"
     options.add_argument("-remote-debugging-port=9224")
@@ -266,17 +267,16 @@ def pahesh(bot: Bot, update: Update):
                 print(button)
                 print("Finding red button")
                 print("clicking", button + i, "th button")
-                try:
-                    GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')[
-                        button + i]
-                    GoogleDriveLink.location_once_scrolled_into_view
-                    # GoogleDriveLink.click()
-                    mLink = getFromInter(GoogleDriveLink.get_attribute('href'))
-                    if mLink == "NA":
-                        raise Exception('NO Cont button')
+                # try:
+                GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')[
+                    button + i]
+                GoogleDriveLink.location_once_scrolled_into_view
+                mLink = getFromInter(GoogleDriveLink.get_attribute('href'))
+                '''if mLink == "NA":
+                    raise Exception('NO Cont button')
                 except:
                     print("Mega button not found.:/")
-                    break
+                    break'''
 
                 print(ver, " : ", mLink)
                 print("Back on", driver.current_url)
