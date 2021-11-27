@@ -85,6 +85,20 @@ def getFromInter(link: str, driver):
                 (By.XPATH, '/html/body/section/div/div/div/div[3]/a')
             ))
     except:
+        if "Just a moment" in driver.title:
+            rLink = driver.current_url
+            driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 't')
+            driver.switch_to.window(driver.window_handles[-1])
+            driver.get(rLink)
+            del rLink
+            Con = WebDriverWait(driver, 100).until(EC.element_to_be_clickable(
+                (By.XPATH, '/html/body/section/div/div/div/div[3]/a')
+            ))
+            Con.location_once_scrolled_into_view
+            print("Clicked Continue")
+            megaLink = Con.get_attribute('href')
+            print(megaLink)
+            return megaLink
         print("No Continue Button")
         return "NA"
     Con.location_once_scrolled_into_view
