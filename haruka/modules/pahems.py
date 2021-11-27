@@ -28,7 +28,7 @@ def getFromInter(link: str, driver):
 
     # Clicking Diasagree for coockies
     try:
-        WebDriverWait(driver, 30).until(
+        WebDriverWait(driver, 11).until(
             EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/button[1]'))).click()
     except:
         pass
@@ -59,16 +59,21 @@ def getFromInter(link: str, driver):
     # Adding 15 Second Pause For Loading The Page
     time.sleep(15)
 
-    ind = 1
+    ind = -1
     for i in range(1, len(driver.window_handles)):
         driver.switch_to.window(driver.window_handles[i])
+        print("checking", driver.current_url)
         if "linegee.net" in str(driver.current_url) or "Spacetica" in str(driver.current_url):
             ind = i
+            print("ind", ind)
             break
 
     # Switching To The Newly Opened Tab linegee.net
-    window_after = driver.window_handles[-1]
-    driver.switch_to.window(window_after)
+    try:
+        window_after = driver.window_handles[ind]
+        driver.switch_to.window(window_after)
+    except:
+        pass
     print("On new tab")
 
     # Addin 5 Second Pause To Load The Page Properly
@@ -85,18 +90,6 @@ def getFromInter(link: str, driver):
                 (By.XPATH, '/html/body/section/div/div/div/div[3]/a')
             ))
     except:
-        if "Just a moment" in driver.title:
-            driver.refresh()
-            time.sleep(5)
-            print(driver.title, driver.current_url)
-            Con = WebDriverWait(driver, 100).until(EC.element_to_be_clickable(
-                (By.XPATH, '/html/body/section/div/div/div/div[3]/a')
-            ))
-            Con.location_once_scrolled_into_view
-            print("Clicked Continue")
-            megaLink = Con.get_attribute('href')
-            print(megaLink)
-            return megaLink
         print("No Continue Button")
         return "NA"
     Con.location_once_scrolled_into_view
