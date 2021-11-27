@@ -86,13 +86,9 @@ def getFromInter(link: str, driver):
             ))
     except:
         if "Just a moment" in driver.title:
-            rLink = driver.current_url
-            driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 't')
-            driver.switch_to.window(driver.window_handles[-1])
-            driver.get(rLink)
+            driver.refresh()
             time.sleep(5)
             print(driver.title, driver.current_url)
-            del rLink
             Con = WebDriverWait(driver, 100).until(EC.element_to_be_clickable(
                 (By.XPATH, '/html/body/section/div/div/div/div[3]/a')
             ))
