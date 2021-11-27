@@ -167,7 +167,7 @@ def pahedl(bot: Bot, update: Update):
             driver.quit()
             time.sleep(5)
             mLink = getFromInter(linktc)
-            print("Back on", driver.current_url)
+            # print("Back on", driver.current_url)
             if mLink == "NA":
                 raise Exception('NO MEGA LINK')
         except:
