@@ -95,9 +95,10 @@ def getFromInter(link: str):
         return "NA"
     Con.location_once_scrolled_into_view
     # Con = driver.find_element_by_xpath('/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')
-    # Con.click()
+    Con.click()
     print("Clicked Continue")
-    megaLink = Con.get_attribute('href')
+    time.sleep(5)
+    megaLink = tDriver.current_url
     print(megaLink)
     tDriver.quit()
     return megaLink
@@ -130,7 +131,7 @@ def pahedl(bot: Bot, update: Update):
     # Getting File Name
     Name = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/h1/span').text
     print("Name: ", Name)
-    res += '[' + str(Name) + '](' + str(driver.current_url) + ')\n'
+    res += str(Name) + '\n'
 
     # here we go
     nameDiv = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/div')
