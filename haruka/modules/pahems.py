@@ -22,19 +22,16 @@ def getFromInter(link: str):
     options.add_argument("-headless")
     options.add_argument("-disable-gpu")
     options.add_argument("-no-sandbox")
-
     binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
     tDriver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'),
                                 options=options)
     tDriver.get(link)
-    # Adding 15 Second Pause For Loading The Page
     time.sleep(5)
-    # Switching To The Newly Opened Tab
     print("Finally here!", tDriver.current_url)
 
     # Clicking Diasagree for coockies
     try:
-        WebDriverWait(tDriver, 11).until(
+        WebDriverWait(tDriver, 15).until(
             EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/button[1]'))).click()
     except:
         pass
@@ -138,15 +135,15 @@ def pahedl(bot: Bot, update: Update):
     # here we go
     nameDiv = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/div')
     cText = nameDiv.text
-    vers = cText.split(" MG ")
-    # driver.quit()
-    # time.sleep(5)
+    vers = cText.split("MG")
+    driver.quit()
+    time.sleep(5)
 
     for i in range(len(vers) - 1):
         print("Running for ", i, "th round")
         ver = ""
         ver = str(vers[i].split(" | ")[0].split("\n")[-1])
-        '''options = webdriver.FirefoxOptions()
+        options = webdriver.FirefoxOptions()
         options.log.level = "trace"
         options.add_argument("-remote-debugging-port=9224")
         options.add_argument("-headless")
@@ -157,7 +154,7 @@ def pahedl(bot: Bot, update: Update):
                                    options=options)
         driver.get(MovieLink)
         print("Getting link")
-        time.sleep(5)'''
+        time.sleep(5)
         try:
             for o in range(0, 2):
                 print("Finding red button")
@@ -166,7 +163,10 @@ def pahedl(bot: Bot, update: Update):
                 GoogleDriveLink.location_once_scrolled_into_view
                 GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')
                 # GoogleDriveLink[i].click()
-            mLink = getFromInter(GoogleDriveLink[i].get_attribute('href'))
+            linktc = GoogleDriveLink[i].get_attribute('href')
+            driver.quit()
+            time.sleep(5)
+            mLink = getFromInter(linktc)
             print("Back on", driver.current_url)
             if mLink == "NA":
                 raise Exception('NO MEGA LINK')
@@ -181,7 +181,7 @@ def pahedl(bot: Bot, update: Update):
             res, parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=False
         )'''
-    driver.quit()
+    # driver.quit()
     bot.send_message(chat_id=-1001581805288, text=res, parse_mode=ParseMode.MARKDOWN,
                      disable_web_page_preview=False)
 
@@ -212,15 +212,31 @@ def pahesh(bot: Bot, update: Update):
     # Getting File Name
     Name = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/h1/span').text
     print("Name: ", Name)
-    res += '[' + str(Name) + '](' + str(driver.current_url) + ')\n'
+    res += str(Name) + '\n'
     navTabs = driver.find_elements_by_xpath('//ul[@class="tabs-nav"]')
     print("There are ", len(navTabs), " columns")
     for x in range(len(navTabs)):
         allLi = driver.find_elements_by_xpath(
             '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(x + 2) + ']/ul/li')
         print("There are ", len(allLi), " rows")
+        driver.quit()
         button = 0
         for y in range(len(allLi)):
+            quals = []
+            links = []
+            # megaLinks = []
+            options = webdriver.FirefoxOptions()
+            options.log.level = "trace"
+            options.add_argument("-remote-debugging-port=9224")
+            options.add_argument("-headless")
+            options.add_argument("-disable-gpu")
+            options.add_argument("-no-sandbox")
+
+            binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
+            driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'),
+                                       options=options)
+            driver.get(MovieLink)
+            time.sleep(5)
             print(button)
             cLi = WebDriverWait(driver, 100).until(
                 EC.element_to_be_clickable((By.XPATH,
@@ -238,7 +254,6 @@ def pahesh(bot: Bot, update: Update):
             print(driver.find_element_by_xpath('//li[@class="current"]').text)
 
             # code
-            start = 0
             del cLi
             print("getting division text")
             nameDiv = driver.find_elements_by_xpath(
@@ -247,15 +262,14 @@ def pahesh(bot: Bot, update: Update):
             vers = cText.split("MG")
             print(vers[0])
             if len(vers) == 1:
+                driver.quit()
                 break
-            if '480p' in vers[0]:
-                if len(vers) == 2:
-                    button = 1
-                    continue
-                start = 1
-            restart = 0
+            if '480p' in vers[0] and len(vers) == 2:
+                driver.quit()
+                button = 1
+                continue
 
-            for i in range(start, len(vers)):
+            for i in range(len(vers)):
                 print("Running for ", i, "th round")
                 if i == len(vers) - 1:
                     print("this is last round")
@@ -264,6 +278,7 @@ def pahesh(bot: Bot, update: Update):
                     break
                 ver = ""
                 ver = str(vers[i].split(" | ")[0].split("\n")[-1])
+                quals.append(ver)
                 print(button)
                 print("Finding red button")
                 print("clicking", button + i, "th button")
@@ -271,20 +286,26 @@ def pahesh(bot: Bot, update: Update):
                 GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')[
                     button + i]
                 GoogleDriveLink.location_once_scrolled_into_view
-                mLink = getFromInter(GoogleDriveLink.get_attribute('href'))
+                links.append(GoogleDriveLink.get_attribute('href'))
+                #mLink = getFromInter(GoogleDriveLink.get_attribute('href'))
                 '''if mLink == "NA":
                     raise Exception('NO Cont button')
                 except:
                     print("Mega button not found.:/")
                     break'''
 
-                print(ver, " : ", mLink)
-                print("Back on", driver.current_url)
-                res += '[' + str(ver) + '](' + str(mLink) + ')\n'
-                print("This round is done!")
+                # print(ver, " : ", mLink)
+                # print("Back on", driver.current_url)
+            driver.quit()
+            for i in range(len(quals)):
+                if '480p' in quals[i]:
+                    continue
+                # megaLinks.append(getFromInter(link=links[i]))
+                res += '[' + str(quals[i]) + '](' + str(getFromInter(link=links[i])) + ')\n'
+            print("This round is done!")
 
     # here we go
-    driver.quit()
+    # driver.quit()
     update.effective_message.reply_text(
         res, parse_mode=ParseMode.MARKDOWN,
         disable_web_page_preview=False
