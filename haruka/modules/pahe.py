@@ -190,6 +190,7 @@ def pahedl(bot: Bot, update: Update):
         print("Running for ", i, "th round")
         ver = ""
         ver = str(vers[i].split(" | ")[0].split("\n")[-1])
+        print(vers[i])
         print(ver)
         options = webdriver.FirefoxOptions()
         options.log.level = "trace"
