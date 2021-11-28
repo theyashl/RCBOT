@@ -178,7 +178,7 @@ def pahedl(bot: Bot, update: Update):
     cText = ""
     nameDivs = driver.find_elements_by_xpath('//*[@class="box download  "]')
     for i in range(len(nameDivs)):
-        nameDiv = driver.find_element_by_xpath('//*[@class="box download  "]')[i]
+        nameDiv = driver.find_elements_by_xpath('//*[@class="box download  "]')[i]
         cText += nameDiv.text
         cText += '\n'
     vers = cText.split("MG")
