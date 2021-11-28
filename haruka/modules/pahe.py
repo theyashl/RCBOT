@@ -164,6 +164,7 @@ def pahedl(bot: Bot, update: Update):
     MovieLink = driver.find_element_by_xpath('//*[@id="main-content"]/div[1]/div[2]/div/div/ul[1]/li/div[1]/h2/a')
     print("l2: ", MovieLink.text)
     MovieLink.click()
+    MovieLink = MovieLink.get_attribute('href')
 
     # Adding 5 Second Pause
     time.sleep(5)
