@@ -172,11 +172,15 @@ def pahedl(bot: Bot, update: Update):
     # Getting File Name
     Name = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/h1/span')
     print("Name: ", Name.text)
-    res += str(Name) + '\n'
+    res += str(Name.text) + '\n'
 
     # here we go
-    nameDiv = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/div')
-    cText = nameDiv.text
+    cText = ""
+    nameDivs = driver.find_elements_by_xpath('//*[@class="box download  "]')
+    for i in range(len(nameDivs)):
+        nameDiv = driver.find_element_by_xpath('//*[@class="box download  "]')[i]
+        cText += nameDiv.text
+        cText += '\n'
     vers = cText.split("MG")
     driver.quit()
     time.sleep(5)
@@ -184,7 +188,10 @@ def pahedl(bot: Bot, update: Update):
     for i in range(len(vers) - 1):
         print("Running for ", i, "th round")
         ver = ""
-        ver = str(vers[i].split(" | ")[0].split("\n")[-1])
+        ver = str(vers[i].split(" | ")[0].split("\n"))
+        if len(ver) > 1:
+            res += ver[-2]
+        ver = ver[-1]
         options = webdriver.FirefoxOptions()
         options.log.level = "trace"
         options.add_argument("-remote-debugging-port=9224")
