@@ -184,7 +184,7 @@ def pahedl(bot: Bot, update: Update):
         )'''
     # driver.quit()
     bot.send_message(chat_id=-1001581805288, text=res, parse_mode=ParseMode.MARKDOWN,
-                     disable_web_page_preview=False)
+                     disable_web_page_preview=True)
 
 
 def pahesh(bot: Bot, update: Update):
@@ -307,12 +307,12 @@ def pahesh(bot: Bot, update: Update):
 
     # here we go
     # driver.quit()
-    update.effective_message.reply_text(
+    '''update.effective_message.reply_text(
         res, parse_mode=ParseMode.MARKDOWN,
-        disable_web_page_preview=False
-    )
-    '''bot.send_message(chat_id=-1001581805288, text=res, parse_mode=ParseMode.MARKDOWN,
-            disable_web_page_preview=False)'''
+        disable_web_page_preview=True
+    )'''
+    bot.send_message(chat_id=-1001581805288, text=res, parse_mode=ParseMode.MARKDOWN,
+            disable_web_page_preview=True)
 
 
 @run_async

@@ -19,15 +19,105 @@ import re
 import os
 
 
+def getFromInter(link: str):
+    megaLink = ""
+    print("Starting new driver")
+    options = webdriver.FirefoxOptions()
+    options.log.level = "trace"
+    options.add_argument("-remote-debugging-port=9224")
+    options.add_argument("-headless")
+    options.add_argument("-disable-gpu")
+    options.add_argument("-no-sandbox")
+    binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
+    tDriver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'),
+                                options=options)
+    tDriver.get(link)
+    time.sleep(5)
+    print("Finally here!", tDriver.current_url)
+
+    # Clicking Diasagree for coockies
+    try:
+        WebDriverWait(tDriver, 15).until(
+            EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/button[1]'))).click()
+    except:
+        pass
+    # driver.find_element_by_xpath("//button[contains(., 'DISAGREE')]").click()
+    # Clicking I Am Not A Robot Button
+    Robot = WebDriverWait(tDriver, 100).until(
+        EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div[1]/div/form/div/div[2]/center/img')))
+    Robot.location_once_scrolled_into_view
+    Robot.click()
+    print("Robot Passed")
+
+    # Adding 15 Second Pause For Loading The Page
+    time.sleep(15)
+
+    # Clicking Generate Link Button
+    print("Generating Link")
+    GenerateLink = tDriver.find_element_by_xpath('//*[@id="generater"]')
+    GenerateLink.click()
+
+    # Adding 15 Second Pause For Loading The Page
+    time.sleep(15)
+
+    # Clicking Download To Get Redirected To Spacetica
+    print("Clicking Download button!:/")
+    Down = tDriver.find_element_by_xpath('//img[@id="showlink"]')
+    Down.click()
+
+    # Adding 15 Second Pause For Loading The Page
+    time.sleep(15)
+
+    # ind = -1
+    print("len", len(tDriver.window_handles))
+    '''for i in range(0, len(tDriver.window_handles)):
+        tDriver.switch_to.window(tDriver.window_handles[i])
+        print("checking", tDriver.current_url)
+        if "linegee.net" in str(tDriver.current_url) or "spacetica.com" in str(tDriver.current_url):
+            ind = i
+            print("ind", ind)
+            break'''
+
+    # Switching To The Newly Opened Tab linegee.net
+    window_after = tDriver.window_handles[-1]
+    tDriver.switch_to.window(window_after)
+    print("On new tab")
+
+    # Addin 5 Second Pause To Load The Page Properly
+    time.sleep(3)
+    print(tDriver.title, tDriver.current_url)
+
+    # Clicking Continue Button On Spacetica
+    try:
+        if "Linegee" in tDriver.title:
+            Con = WebDriverWait(tDriver, 60).until(EC.element_to_be_clickable(
+                (By.XPATH, '/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')))
+        else:
+            Con = WebDriverWait(tDriver, 60).until(EC.element_to_be_clickable(
+                (By.XPATH, '/html/body/section/div/div/div/div[3]/a')
+            ))
+    except:
+        print("No Continue Button")
+        return "NA"
+    Con.location_once_scrolled_into_view
+    # Con = driver.find_element_by_xpath('/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')
+    Con.click()
+    print("Clicked Continue")
+    time.sleep(5)
+    megaLink = tDriver.current_url
+    print(megaLink)
+    tDriver.quit()
+    return megaLink
+
+
 @run_async
 def pahedl(bot: Bot, update: Update):
     msg = update.effective_message
-    msg = msg.text[6:]
-    start_time = time.time()
+    MovieName = msg.text[6:]
+    res = ""
 
     # Getting User Input
     # print("Enter file name-gdrive name-password")
-    MovieName, Email, Password = str(msg).split("-")
     # print('Enter The Name Of The Movie You Want To Download' )
     # MovieName = input()
 
@@ -47,13 +137,7 @@ def pahedl(bot: Bot, update: Update):
     options.add_argument("-no-sandbox")
 
     binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
-
-    profile = webdriver.FirefoxProfile()
-    profile.set_preference("browser.download.folderList", 2)
-    profile.set_preference("browser.download.manager.showWhenStarting", False)
-    profile.set_preference("browser.download.dir", '/app/'+str(update.effective_user.id))
-    profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/x-gzip")
-    driver = webdriver.Firefox(firefox_binary=binary, firefox_profile=profile, executable_path=os.environ.get('GECKODRIVER_PATH'), options=options)
+    driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'), options=options)
     driver.get('https://pahe.ph/')
     time.sleep(3)
     print(driver.title)
@@ -72,7 +156,7 @@ def pahedl(bot: Bot, update: Update):
     searchbox.send_keys(Keys.ENTER)
 
     # Adding 7 Second Pause
-    time.sleep(10)
+    time.sleep(7)
 
     # Opening The Movie Page
     MovieLink = driver.find_elements_by_xpath('//h2//a')
@@ -84,264 +168,57 @@ def pahedl(bot: Bot, update: Update):
     # Adding 5 Second Pause
     time.sleep(5)
 
-    # Creating Download Dir
-    tmp_directory_for_each_user = str(update.effective_user.id)
-    if not os.path.isdir(tmp_directory_for_each_user):
-        print('DirectoryNAcreating...')
-        os.makedirs(tmp_directory_for_each_user)
-    else:
-        print('!!!directoryavailable')
-
     # Getting File Name
     Name = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/h1/span')
     print("Name: ", Name.text)
-    download_directory = '/app/' + tmp_directory_for_each_user + '/'
+    res += str(Name) + '\n'
 
-    # Opeing The GDrive Links/First GDLink In 720p Section
-    for o in range(0, 2):
-        GoogleDriveLink = WebDriverWait(driver, 1000000).until(EC.element_to_be_clickable((By.XPATH,'//*[@class="shortc-button small purple "]')))
-        GoogleDriveLink.location_once_scrolled_into_view
-        GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small purple "]')
-        print(GoogleDriveLink)
-        GoogleDriveLink[1].click()
-
-    # Switching To The Newly Opened Tab
-    print("Finally here!")
-    '''window_after = driver.window_handles[1]
-    driver.switch_to.window(window_after)'''
-
-    # Adding 30 Second Pause For Loading The Page
-    time.sleep(30)
-
-    # Clicking I Am Not A Robot Button
-    Robot = driver.find_element_by_xpath('/html/body/div[2]/div/div[1]/div/form/div/div[2]/center/img')
-    Robot.click()
-    print("Robot Passed")
-
-    # Adding 15 Second Pause For Loading The Page
-    time.sleep(15)
-
-    # Clicking Generate Link Button
-    print("Generating Link")
-    GenerateLink = driver.find_element_by_xpath('//*[@id="generater"]')
-    GenerateLink.click()
-
-    # Adding 15 Second Pause For Loading The Page
-    time.sleep(15)
-
-    # Clicking Download To Get Redirected To Spacetica
-    Down = driver.find_element_by_xpath('//*[@id="showlink"]')
-    Down.click()
-
-    # Adding 15 Second Pause For Loading The Page
-    time.sleep(15)
-
-    # Switching To The Newly Opened Tab
-    window_after = driver.window_handles[1]
-    driver.switch_to.window(window_after)
-    print("On new tab")
-
-    # Addin 10 Second Pause To Load The Page Properly
-    time.sleep(10)
-
-    # Clicking Continue Button On Spacetica
-    Con = driver.find_element_by_xpath('/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')
-    Con.click()
-    print("Clicked Continue")
-
-    # Switching To Klop Login
-    '''window_after = driver.window_handles[3]
-    driver.switch_to.window(window_after)'''
-
-    # Opeing A New Tab For StackOverflow To Bypass Gmail Login Security Issue Due To Autoamtion
-    print("Stack Overflow ByPass")
-    NewTab = driver.find_element_by_tag_name('body')
-    NewTab.send_keys(Keys.CONTROL + 't')
-
-    # Switching To The New Tab
-    window_after = driver.window_handles[2]
-    driver.switch_to.window(window_after)
-
-    # Getting StackOverflow SignUp Page For Logging In Gmail
-    driver.get('https://stackoverflow.com/users/signup?ssrc=head&returnurl=%2fusers%2fstory%2fcurrent')
-
-    # Adding 5 Second Sleep
+    # here we go
+    nameDiv = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/div')
+    cText = nameDiv.text
+    vers = cText.split("MG")
+    driver.quit()
     time.sleep(5)
 
-    # Clicking The Signin With Gmail Button
-    SignUp = driver.find_element_by_xpath('/html/body/div[3]/div[2]/div/div[2]/div[2]/button[1]')
-    SignUp.click()
-    print("Signing up with google")
+    for i in range(len(vers) - 1):
+        print("Running for ", i, "th round")
+        ver = ""
+        ver = str(vers[i].split(" | ")[0].split("\n")[-1])
+        options = webdriver.FirefoxOptions()
+        options.log.level = "trace"
+        options.add_argument("-remote-debugging-port=9224")
+        options.add_argument("-headless")
+        options.add_argument("-disable-gpu")
+        options.add_argument("-no-sandbox")
+        binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
+        driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'),
+                                   options=options)
+        driver.get(MovieLink)
+        print("Getting link")
+        time.sleep(5)
+        try:
+            for o in range(0, 2):
+                print("Finding red button")
+                GoogleDriveLink = WebDriverWait(driver, 100).until(
+                    EC.element_to_be_clickable((By.XPATH, '//*[@class="shortc-button small red "]')))
+                GoogleDriveLink.location_once_scrolled_into_view
+                GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')
+                # GoogleDriveLink[i].click()
+            linktc = GoogleDriveLink[i].get_attribute('href')
+            driver.quit()
+            time.sleep(5)
+            mLink = getFromInter(linktc)
+            if mLink == "NA":
+                raise Exception('NO MEGA LINK')
+        except:
+            break
 
-    # Typing Email On Gmail For Login
-    EmailField = driver.find_element_by_xpath('//input[@id="identifierId"]')
-    EmailField.send_keys(Email)
-
-    # Adding 5 Second Pause To Load Page Properly
-    time.sleep(5)
-
-    # Clicking The Next Button To Get Forwarded To Entering The Password
-    EmailForward = driver.find_element_by_xpath(
-        '/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[2]/div/div[1]/div/div/button/span')
-    EmailForward.click()
-
-    # Adding 2 Second Sleep In Case
-    time.sleep(2)
-
-    # Typing Password On Gmail For Login
-    print("Entering Password")
-    PasswordField = driver.find_element_by_xpath(
-        '/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div[1]/div/div/div/div/div[1]/div/div[1]/input')
-    PasswordField.send_keys(Password)
-
-    # Adding 2 Second Sleep
-    time.sleep(2)
-
-    # Clicking The Next Button To Get Forwarded To The Permission Page For GDrive
-    print("Password next")
-    PasswordForward = driver.find_element_by_xpath('//*[@id="passwordNext"]')
-    PasswordForward.click()
-
-    # Switching Back To The Previous Tab
-    window_after = driver.window_handles[1]
-    driver.switch_to.window(window_after)
-
-    # Adding 5 Second Pause To Load The Page Properly
-    time.sleep(5)
-
-    # gdtot new
-    dlbtn = driver.find_element_by_xpath('//*[@id="down1"]')
-    dlbtn.click()
-    #gdtot end
-    '''
-    # Clicking Allow Button For Permission
-    for p in range(0, 2):
-        abc = driver.find_element_by_xpath('/html/body/div/div/div[2]/form/center/button')
-        abc.click()
-
-    # Adding 5 Second Sleep
-    time.sleep(5)
-
-    # Clicking Get Code Button For Getting The Authenticated Code For KLOP
-    for q in range(0, 2):
-        GetCode = driver.find_element_by_xpath('/html/body/div/form/div/div[2]/center/button[2]')
-        GetCode.click()
-
-    # Adding 5 Second Pause
-    time.sleep(5)
-
-    # Switching To The Code Tab
-    window_after = driver.window_handles[4]
-    driver.switch_to.window(window_after)
-    # Adding 3 Second Pause'''
-    time.sleep(3)
-
-    # Clicking The Account Logged In Before
-    EmailField = driver.find_element_by_xpath(
-        '/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div/div/ul/li[1]/div')
-    EmailField.click()
-
-    # Adding 5 Second Pause
-    time.sleep(7)
-
-    # Clicking Allow For Drive Permissions
-    Allow = driver.find_element_by_xpath('/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[2]/div/div[1]/div[2]/div/button/div[2]')
-    Allow.click()
-
-    # Adding 5 Second Pause
-    time.sleep(5)
-
-    # Click Allow Again For Editing Drive Contents
-    '''Allo = driver.find_element_by_xpath('//*[@id="submit_approve_access"]')
-    Allo.click()
-
-    # Adding 5 Second Pause
-    time.sleep(5)
-
-    # Getting Conformation Code And Copying It To ClipBoard
-    ConformationCode = driver.find_element_by_xpath(
-        '/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div/div/div/div/div')
-    ConformationCode.click()
-
-    # Adding 3 Second Pause
-    time.sleep(3)
-
-    # Switching Back To Klop For Entering Conformation Code
-    window_after = driver.window_handles[3]
-    driver.switch_to.window(window_after)
-
-    # Clicking Code Input Field & Pasting The Conformation Code
-    CodeInput = driver.find_element_by_xpath('/html/body/div/form/div/div[2]/div/div/input')
-    CodeInput.click()
-    Key = pyperclip.paste()
-    CodeInput.send_keys(pyperclip.paste())
-
-    # Adding 3 Second Pause
-    time.sleep(3)
-
-    # Conforming The Copied Code To Login In KLOP
-    Confirm = driver.find_element_by_xpath('/html/body/div/form/div/div[2]/center/button[1]')
-    Confirm.click()
-
-    # Adding 2 Second Pause'''
-    time.sleep(2)
-
-    # Clicking Generate Download Link Button
-    #for r in range(0, 2):
-    GenerateDownloadLink = driver.find_element_by_xpath('//*[@id="down"]')
-    GenerateDownloadLink.click()
-
-    # Adding 2 Second Pause
-    time.sleep(2)
-
-    # Clicking Download File Button To Get Redirected To GDrive Link
-    # for s in range(0, 2):
-    DownloadFile = driver.find_element_by_xpath('/html/body/div[1]/div/div/div/div/div/div/div[2]/a[1]')
-    DownloadFile.click()
-
-    # Switching To GDrive Link Page
-    window_after = driver.window_handles[2]
-    driver.switch_to.window(window_after)
-
-    # Adding 10 Second Pause To Load The Page Properly
-    time.sleep(10)
-
-    # Clicking Download Button To Go The Download File Page
-    GDownload = driver.find_element_by_xpath('/html/body/div[3]/div[4]/div/div[3]/div[2]/div[2]/div[3]/div')
-    GDownload.click()
-
-    # Switching To Download File Tab
-    window_after = driver.window_handles[3]
-    driver.switch_to.window(window_after)
-
-    # Adding 10 Second Pause To Load Page Properly
-    time.sleep(10)
-
-    # Clicking The Final Download Button To Get The Prompt To Save The File & Start Download
-    # for t in range(0, 2):
-    GDownloadFinal = driver.find_element_by_xpath('//*[@id="uc-download-link"]')
-    GDownloadFinal.click()
-
-    # Printing The Total Time Elapsed
-    elapsed_time = time.time() - start_time
-    print(time.strftime("%H:%M:%S", time.gmtime(elapsed_time)))
-
-    # getting downloaded fle
-    rootdir = "/app/" + str(update.effective_user.id)
-    regex = re.compile(MovieName[0] + '.*')
-
-    for root, dirs, files in os.walk(rootdir):
-        for file in files:
-            if regex.match(file):
-                download_directory += file
-
-    bot.send_document(
-        chat_id=update.message.chat.id,
-        document=download_directory,
-        caption=Name,
-        parse_mode="HTML",
-        reply_to_message_id=update.message.reply_to_message.message_id
-    )
+        res += '[' + str(ver) + '](' + str(mLink) + ')\n'
+        print("This round is done!")
+    update.effective_message.reply_text(
+            res, parse_mode=ParseMode.MARKDOWN,
+            disable_web_page_preview=True
+        )
 
 
 PAHE_HANDLER = DisableAbleCommandHandler("pahe", pahedl)
