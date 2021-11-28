@@ -104,6 +104,7 @@ def getFromInter(link: str):
     Con.click()
     print("Clicked Continue")
     time.sleep(5)
+    tDriver.switch_to.window(tDriver.window_handles[-1])
     megaLink = tDriver.current_url
     print(megaLink)
     tDriver.quit()
@@ -188,10 +189,8 @@ def pahedl(bot: Bot, update: Update):
     for i in range(len(vers) - 1):
         print("Running for ", i, "th round")
         ver = ""
-        ver = str(vers[i].split(" | ")[0].split("\n"))
-        if len(ver) > 1:
-            res += ver[-2]
-        ver = ver[-1]
+        ver = str(vers[i].split(" | ")[0].split("\n")[-1])
+        print(ver)
         options = webdriver.FirefoxOptions()
         options.log.level = "trace"
         options.add_argument("-remote-debugging-port=9224")

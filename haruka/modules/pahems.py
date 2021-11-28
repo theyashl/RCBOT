@@ -98,6 +98,7 @@ def getFromInter(link: str):
     Con.click()
     print("Clicked Continue")
     time.sleep(5)
+    tDriver.switch_to.window(tDriver.window_handles[-1])
     megaLink = tDriver.current_url
     print(megaLink)
     tDriver.quit()
