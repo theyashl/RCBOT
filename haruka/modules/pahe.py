@@ -43,8 +43,12 @@ def getFromInter(link: str):
         pass
     # driver.find_element_by_xpath("//button[contains(., 'DISAGREE')]").click()
     # Clicking I Am Not A Robot Button
-    Robot = WebDriverWait(tDriver, 100).until(
-        EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div[1]/div/form/div/div[2]/center/img')))
+    try:
+        Robot = WebDriverWait(tDriver, 100).until(
+            EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div[1]/div/form/div/div[2]/center/img')))
+    except:
+        tDriver.quit()
+        return "NA"
     Robot.location_once_scrolled_into_view
     Robot.click()
     print("Robot Passed")
@@ -215,8 +219,10 @@ def pahedl(bot: Bot, update: Update):
                 GoogleDriveLink.location_once_scrolled_into_view
                 GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')
                 # GoogleDriveLink[i].click()
-            driver.execute_script("arguments[0].click();", GoogleDriveLink[i])
-            time.sleep(5)
+            GoogleDriveLink[i].location_once_scrolled_into_view
+            while('pahe.ph' in driver.current_url):
+                driver.execute_script("arguments[0].click();", GoogleDriveLink[i])
+                time.sleep(5)
             linktc = driver.current_url
             print(linktc)
             driver.quit()
