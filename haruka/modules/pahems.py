@@ -98,7 +98,7 @@ def getFromInter(link: str):
     Con.click()
     print("Clicked Continue")
     time.sleep(5)
-    tDriver.switch_to.window(tDriver.window_handles[-1])
+    # tDriver.switch_to.window(tDriver.window_handles[-1])
     megaLink = tDriver.current_url
     print(megaLink)
     tDriver.quit()
@@ -165,7 +165,8 @@ def pahedl(bot: Bot, update: Update):
                 GoogleDriveLink.location_once_scrolled_into_view
                 GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')
                 # GoogleDriveLink[i].click()
-            linktc = GoogleDriveLink[i].get_attribute('href')
+            GoogleDriveLink[i].click()
+            linktc = driver.current_url
             driver.quit()
             time.sleep(5)
             mLink = getFromInter(linktc)
@@ -288,7 +289,9 @@ def pahesh(bot: Bot, update: Update):
                 GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')[
                     button + i]
                 GoogleDriveLink.location_once_scrolled_into_view
-                links.append(GoogleDriveLink.get_attribute('href'))
+                GoogleDriveLink.click()
+                links.append(driver.current_url)
+                driver.execute_script("window.history.go(-1)")
                 #mLink = getFromInter(GoogleDriveLink.get_attribute('href'))
                 '''if mLink == "NA":
                     raise Exception('NO Cont button')
