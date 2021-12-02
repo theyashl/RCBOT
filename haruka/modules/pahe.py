@@ -215,7 +215,7 @@ def pahedl(bot: Bot, update: Update):
                 GoogleDriveLink.location_once_scrolled_into_view
                 GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')
                 # GoogleDriveLink[i].click()
-            GoogleDriveLink[i].click()
+            driver.execute_script("arguments[0].click();", GoogleDriveLink[i])
             linktc = driver.current_url
             driver.quit()
             time.sleep(5)

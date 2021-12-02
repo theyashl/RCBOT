@@ -164,8 +164,8 @@ def pahedl(bot: Bot, update: Update):
                     EC.element_to_be_clickable((By.XPATH, '//*[@class="shortc-button small red "]')))
                 GoogleDriveLink.location_once_scrolled_into_view
                 GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')
-                # GoogleDriveLink[i].click()
-            GoogleDriveLink[i].click()
+                driver.execute_script("arguments[0].click();", GoogleDriveLink[i])
+            time.sleep(3)
             linktc = driver.current_url
             driver.quit()
             time.sleep(5)
@@ -180,13 +180,13 @@ def pahedl(bot: Bot, update: Update):
         # driver.quit()
         # time.sleep(5)
         print("This round is done!")
-    '''update.effective_message.reply_text(
+    update.effective_message.reply_text(
             res, parse_mode=ParseMode.MARKDOWN,
-            disable_web_page_preview=False
-        )'''
+            disable_web_page_preview=True
+        )
     # driver.quit()
-    bot.send_message(chat_id=-1001581805288, text=res, parse_mode=ParseMode.MARKDOWN,
-                     disable_web_page_preview=True)
+    '''bot.send_message(chat_id=-1001581805288, text=res, parse_mode=ParseMode.MARKDOWN,
+                     disable_web_page_preview=True)'''
 
 
 def pahesh(bot: Bot, update: Update):
@@ -289,7 +289,8 @@ def pahesh(bot: Bot, update: Update):
                 GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')[
                     button + i]
                 GoogleDriveLink.location_once_scrolled_into_view
-                GoogleDriveLink.click()
+                driver.execute_script("arguments[0].click();", GoogleDriveLink)
+                time.sleep(3)
                 links.append(driver.current_url)
                 driver.execute_script("window.history.go(-1)")
                 #mLink = getFromInter(GoogleDriveLink.get_attribute('href'))
@@ -311,12 +312,12 @@ def pahesh(bot: Bot, update: Update):
 
     # here we go
     # driver.quit()
-    '''update.effective_message.reply_text(
+    update.effective_message.reply_text(
         res, parse_mode=ParseMode.MARKDOWN,
         disable_web_page_preview=True
-    )'''
-    bot.send_message(chat_id=-1001581805288, text=res, parse_mode=ParseMode.MARKDOWN,
-            disable_web_page_preview=True)
+    )
+    '''bot.send_message(chat_id=-1001581805288, text=res, parse_mode=ParseMode.MARKDOWN,
+            disable_web_page_preview=True)'''
 
 
 @run_async
