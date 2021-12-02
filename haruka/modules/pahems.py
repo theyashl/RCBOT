@@ -164,9 +164,10 @@ def pahedl(bot: Bot, update: Update):
                     EC.element_to_be_clickable((By.XPATH, '//*[@class="shortc-button small red "]')))
                 GoogleDriveLink.location_once_scrolled_into_view
                 GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')
-                driver.execute_script("arguments[0].click();", GoogleDriveLink[i])
-            time.sleep(3)
+            driver.execute_script("arguments[0].click();", GoogleDriveLink[i])
+            time.sleep(5)
             linktc = driver.current_url
+            print(linktc)
             driver.quit()
             time.sleep(5)
             mLink = getFromInter(linktc)
@@ -290,7 +291,8 @@ def pahesh(bot: Bot, update: Update):
                     button + i]
                 GoogleDriveLink.location_once_scrolled_into_view
                 driver.execute_script("arguments[0].click();", GoogleDriveLink)
-                time.sleep(3)
+                time.sleep(5)
+                print("appending", driver.current_url)
                 links.append(driver.current_url)
                 driver.execute_script("window.history.go(-1)")
                 #mLink = getFromInter(GoogleDriveLink.get_attribute('href'))
