@@ -214,15 +214,16 @@ def pahedl(bot: Bot, update: Update):
         try:
             for o in range(0, 2):
                 print("Finding red button")
-                GoogleDriveLink = WebDriverWait(driver, 100).until(
+                '''GoogleDriveLink = WebDriverWait(driver, 100).until(
                     EC.element_to_be_clickable((By.XPATH, '//*[@class="shortc-button small red "]')))
+                GoogleDriveLink.location_once_scrolled_into_view'''
+                GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')[i]
                 GoogleDriveLink.location_once_scrolled_into_view
-                GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')
-                # GoogleDriveLink[i].click()
-            GoogleDriveLink[i].location_once_scrolled_into_view
-            while('pahe.ph' in driver.current_url):
-                driver.execute_script("arguments[0].click();", GoogleDriveLink[i])
-                time.sleep(5)
+                GoogleDriveLink.click()
+
+            # on intercelestial
+            time.sleep(5)
+            print("len", len(tDriver.window_handles))
             linktc = driver.current_url
             print(linktc)
             driver.quit()
