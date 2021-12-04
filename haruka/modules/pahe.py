@@ -217,9 +217,13 @@ def pahedl(bot: Bot, update: Update):
                 '''GoogleDriveLink = WebDriverWait(driver, 100).until(
                     EC.element_to_be_clickable((By.XPATH, '//*[@class="shortc-button small red "]')))
                 GoogleDriveLink.location_once_scrolled_into_view'''
-                GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')[i]
-                GoogleDriveLink.location_once_scrolled_into_view
-                GoogleDriveLink.click()
+                try:
+                    GoogleDriveLink = driver.find_elements_by_xpath('//*[@class="shortc-button small red "]')[i]
+                    GoogleDriveLink.location_once_scrolled_into_view
+                    GoogleDriveLink.click()
+                    print("Clicked red button")
+                except:
+                    pass
 
             # on intercelestial
             time.sleep(5)
@@ -231,7 +235,12 @@ def pahedl(bot: Bot, update: Update):
             mLink = getFromInter(linktc)
             if mLink == "NA":
                 raise Exception('NO MEGA LINK')
-        except:
+        except Exception as e:
+            try:
+                driver.quit()
+            except:
+                pass
+            print(e)
             break
 
         res += '[' + str(ver) + '](' + str(mLink) + ')\n'
