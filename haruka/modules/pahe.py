@@ -200,7 +200,11 @@ def pahedl(bot: Bot, update: Update):
                 raise Exception("No Mega")
             Con.location_once_scrolled_into_view
             # Con = driver.find_element_by_xpath('/html/body/div[2]/section[2]/div/div/div[1]/div/div[1]/div[3]/center/p/a')
-            Con.click()
+            try:
+                Con.click()
+            except:
+                time.sleep(5)
+                Con.click()
             print("Clicked Continue")
             time.sleep(5)
             # tDriver.switch_to.window(tDriver.window_handles[-1])
