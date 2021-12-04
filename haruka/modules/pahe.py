@@ -186,7 +186,9 @@ def pahedl(bot: Bot, update: Update):
         nameDiv = driver.find_elements_by_xpath('//*[@class="box download  "]')[i]
         cText += nameDiv.text
         cText += '\n'
+    print(cText)
     vers = cText.split("MG")
+    print("vers len", len(vers))
     driver.quit()
     time.sleep(5)
 
