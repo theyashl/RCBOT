@@ -100,7 +100,7 @@ def pahedl(bot: Bot, update: Update):
         print("Running for ", i, "th round")
         ver = ""
         ver = vers[i].split(" | ")[0].split("\n")
-        if len(ver) > 2:
+        if len(ver) > 2 and 'ource' in str(ver[-3]):
             print(ver[-3])
             res += str(ver[-3])
         ver = str(ver[-1])
