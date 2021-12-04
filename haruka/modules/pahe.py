@@ -169,7 +169,7 @@ def pahedl(bot: Bot, update: Update):
     cLink = driver.find_element_by_xpath('//*[@id="main-content"]/div[1]/div[2]/div/div/ul[1]/li/div[1]/h2/a')
     print("l2: ", cLink.text)
     MovieLink = cLink.get_attribute('href')
-    cLink.click()
+    driver.execute_script("arguments[0].click();", MovieLink)
 
     # Adding 5 Second Pause
     time.sleep(5)
@@ -227,7 +227,7 @@ def pahedl(bot: Bot, update: Update):
 
             # on intercelestial
             time.sleep(5)
-            print("len", len(tDriver.window_handles))
+            print("len", len(driver.window_handles))
             linktc = driver.current_url
             print(linktc)
             driver.quit()
