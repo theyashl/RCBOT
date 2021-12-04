@@ -337,7 +337,11 @@ def pahesh(bot: Bot, update: Update):
                 print("len", len(driver.window_handles))
                 # Switching To The Newly Opened Tab linegee.net
                 window_after = driver.window_handles[-1]
-                driver.switch_to.window(window_after)
+                for win in driver.window_handles:
+                    driver.switch_to.window(win)
+                    if 'inegee.' in str(driver.current_url):
+                        break
+                # driver.switch_to.window(window_after)
                 print("On new tab")
 
                 time.sleep(3)
