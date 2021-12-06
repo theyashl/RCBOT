@@ -71,8 +71,13 @@ def pahedl(bot: Bot, update: Update):
         options.add_argument("-disable-gpu")
         options.add_argument("-no-sandbox")
         binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
-        driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'),
+        try:
+            driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'),
                                    options=options)
+        except Exception:
+            print("Retrying init driver")
+            driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'),
+                                       options=options)
         driver.get(MovieLink)
         print("Getting link")
         time.sleep(5)
@@ -167,6 +172,7 @@ def pahedl(bot: Bot, update: Update):
             print(e)
             break
 
+        time.sleep(5)
         res += '[' + str(ver) + '](' + str(mLink) + ')\n'
         print("res", res)
         print("This round is done!")
