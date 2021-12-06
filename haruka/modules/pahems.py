@@ -207,6 +207,7 @@ def pahesh(bot: Bot, update: Update):
     Name = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/h1/span').text
     print("Name: ", Name)
     res += str(Name) + '\n'
+    POSTER = str(driver.find_element_by_xpath('//img[@class="imdbwp__img"]').get_attribute('src'))
     navTabs = driver.find_elements_by_xpath('//ul[@class="tabs-nav"]')
     print("There are ", len(navTabs), " columns")
     for x in range(len(navTabs)):
@@ -278,7 +279,13 @@ def pahesh(bot: Bot, update: Update):
                     print(button)
                     break
                 ver = ""
-                ver = str(vers[i].split(" | ")[0].split("\n")[-1])
+                if ' | ' in vers[i]:
+                    ver = str(vers[i].split(" | ")[0].split("\n")[-1])
+                else:
+                    for v in vers[i].split("\n"):
+                        if len(v.strip()) > 3:
+                            ver = v
+                            break
                 if '480p' in ver:
                     continue
                 options = webdriver.FirefoxOptions()
@@ -412,7 +419,8 @@ def pahesh(bot: Bot, update: Update):
 
     # here we go
     # driver.quit()
-    update.effective_message.reply_text(
+    update.effective_message.reply_photo(
+        POSTER,
         res, parse_mode=ParseMode.MARKDOWN,
         disable_web_page_preview=True
     )
