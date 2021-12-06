@@ -55,7 +55,6 @@ def pahedl(bot: Bot, update: Update):
     for i in range(len(vers) - 1):
         print("Running for ", i, "th round")
         ver = ""
-        print(vers[i])
         if ' | ' in str(vers[i]):
             ver = str(vers[i].split(" | ")[0].split("\n")[-1])
         else:
@@ -215,6 +214,12 @@ def pahesh(bot: Bot, update: Update):
             '/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[' + str(x + 2) + ']/ul/li')
         print("There are ", len(allLi), " rows")
         driver.quit()
+        time.sleep(5)
+        try:
+            driver.quit()
+            time.sleep(5)
+        except:
+            pass
         button = 0
         for y in range(len(allLi)):
             options = webdriver.FirefoxOptions()
@@ -225,8 +230,13 @@ def pahesh(bot: Bot, update: Update):
             options.add_argument("-no-sandbox")
 
             binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
-            driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'),
+            try:
+                driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'),
                                        options=options)
+            except Exception:
+                print("retrying init driver")
+                driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'),
+                                           options=options)
             driver.get(MovieLink)
             time.sleep(5)
             print(button)
