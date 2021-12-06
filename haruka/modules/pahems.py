@@ -58,7 +58,11 @@ def pahedl(bot: Bot, update: Update):
         if ' | ' in str(vers[i]):
             ver = str(vers[i].split(" | ")[0].split("\n")[-1])
         else:
-            ver = str(vers[i].split("\n")[1])
+            # ver = str(vers[i].split("\n")[0])
+            for v in vers[i].split("\n"):
+                if len(v) > 3:
+                    ver = v
+                    break
         print(ver)
         options = webdriver.FirefoxOptions()
         options.log.level = "trace"
