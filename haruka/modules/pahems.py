@@ -43,6 +43,7 @@ def pahedl(bot: Bot, update: Update):
     res += str(Name) + '\n'
 
     POSTER = str(driver.find_element_by_xpath('//img[@class="imdbwp__img"]').get_attribute('src'))
+    # res += str(driver.find_element_by_xpath('//div[@class="imdbwp__meta"]').text) + '\n'
 
     # here we go
     nameDiv = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/div')
