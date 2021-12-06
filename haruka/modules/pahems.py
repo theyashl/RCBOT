@@ -60,7 +60,7 @@ def pahedl(bot: Bot, update: Update):
         else:
             # ver = str(vers[i].split("\n")[0])
             for v in vers[i].split("\n"):
-                if len(v) > 3:
+                if len(v.strip()) > 3:
                     ver = v
                     break
         print(ver)
