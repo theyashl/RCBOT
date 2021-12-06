@@ -54,7 +54,12 @@ def pahedl(bot: Bot, update: Update):
     for i in range(len(vers) - 1):
         print("Running for ", i, "th round")
         ver = ""
-        ver = str(vers[i].split(" | ")[0].split("\n")[-1]) if ' | ' in str(vers[i]) else str(vers[i].split("\n")[1])
+        print(vers[i])
+        if ' | ' in str(vers[i]):
+            ver = str(vers[i].split(" | ")[0].split("\n")[-1])
+        else:
+            ver = str(vers[i].split("\n")[1])
+        print(ver)
         options = webdriver.FirefoxOptions()
         options.log.level = "trace"
         options.add_argument("-remote-debugging-port=9224")
@@ -147,7 +152,7 @@ def pahedl(bot: Bot, update: Update):
             print("Clicked Continue")
             time.sleep(5)
             # tDriver.switch_to.window(tDriver.window_handles[-1])
-            mLink = driver.current_url
+            mLink = str(driver.current_url).split('#')[0]
             print(mLink)
             driver.quit()
         except Exception as e:
@@ -159,6 +164,7 @@ def pahedl(bot: Bot, update: Update):
             break
 
         res += '[' + str(ver) + '](' + str(mLink) + ')\n'
+        print("res", res)
         print("This round is done!")
     update.effective_message.reply_photo(
             POSTER,
