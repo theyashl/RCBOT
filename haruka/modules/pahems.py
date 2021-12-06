@@ -52,7 +52,7 @@ def pahedl(bot: Bot, update: Update):
     for i in range(len(vers) - 1):
         print("Running for ", i, "th round")
         ver = ""
-        ver = str(vers[i].split(" | ")[0].split("\n")[-1])
+        ver = str(vers[i].split(" | ")[0].split("\n")[-1]) if ' | ' in str(vers[i]) else str(vers[i].split("\n")[1])
         options = webdriver.FirefoxOptions()
         options.log.level = "trace"
         options.add_argument("-remote-debugging-port=9224")
