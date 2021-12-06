@@ -436,8 +436,9 @@ def pahesh(bot: Bot, update: Update):
 
 @run_async
 def clook(bot: Bot, update: Update):
-    if update.effective_chat.type == "private":
+    if update.effective_chat.type == "private" or str(update.effective_chat.id) == "-1001567635369":
         msg = update.effective_message.text
+        print("get to work!")
         if 'https://pahe.ph/' in msg:
             if 'Season' in msg:
                 # TV Show
