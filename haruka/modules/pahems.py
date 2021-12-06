@@ -42,6 +42,8 @@ def pahedl(bot: Bot, update: Update):
     print("Name: ", Name)
     res += str(Name) + '\n'
 
+    POSTER = str(driver.find_element_by_xpath('//img[@class="imdbwp__img"]').get_attribute('src'))
+
     # here we go
     nameDiv = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/div[2]/div[2]/div')
     cText = nameDiv.text
@@ -158,7 +160,8 @@ def pahedl(bot: Bot, update: Update):
 
         res += '[' + str(ver) + '](' + str(mLink) + ')\n'
         print("This round is done!")
-    update.effective_message.reply_text(
+    update.effective_message.reply_photo(
+            POSTER,
             res, parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True
         )
