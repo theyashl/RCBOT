@@ -21,6 +21,8 @@ hurry.filesize
 #translator
 googletrans==3.1.0a0
 
+beautifulsoup4
+lxml
 tldextract
 PyYAML
 pyowm
