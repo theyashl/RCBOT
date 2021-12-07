@@ -462,6 +462,8 @@ def pahesh(bot: Bot, update: Update):
 @run_async
 def clook(bot: Bot, update: Update):
     if update.effective_chat.type == "private" or str(update.effective_chat.id) == "-1001567635369":
+        global drake
+        global q
         msg = update.effective_message.text
         if 'https://pahe.ph/' in msg:
             q.put(update)
