@@ -11,7 +11,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import os
-
+from queue import Queue
+q = Queue(maxsize=10)
+drake = False
 
 # CUST_FILTER_HANDLER = MessageHandler(CustomFilters.has_text, reply_filter)
 def pahedl(bot: Bot, update: Update):
@@ -38,11 +40,12 @@ def pahedl(bot: Bot, update: Update):
     res = ""
 
     # Getting File Name
-    Name = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/h1/span').text
-    print("Name: ", Name)
-    res += str(Name) + '\n'
+    if str(update.effective_chat.id) != "-1001567635369":
+        Name = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/h1/span').text
+        print("Name: ", Name)
+        res += str(Name) + '\n'
 
-    POSTER = str(driver.find_element_by_xpath('//img[@class="imdbwp__img"]').get_attribute('src'))
+        POSTER = str(driver.find_element_by_xpath('//img[@class="imdbwp__img"]').get_attribute('src'))
     # res += str(driver.find_element_by_xpath('//div[@class="imdbwp__meta"]').text) + '\n'
 
     # here we go
@@ -64,6 +67,10 @@ def pahedl(bot: Bot, update: Update):
                     ver = v
                     break
         print(ver)
+        if '480p' in ver:
+            continue
+        elif str(update.effective_chat.id) == "-1001567635369" and '1080p' in ver:
+            break
         options = webdriver.FirefoxOptions()
         options.log.level = "trace"
         options.add_argument("-remote-debugging-port=9224")
@@ -173,10 +180,17 @@ def pahedl(bot: Bot, update: Update):
             break
 
         time.sleep(5)
-        res += '[' + str(ver) + '](' + str(mLink) + ')\n'
+        if str(update.effective_chat.id) != "-1001567635369":
+            res += '[' + str(ver) + '](' + str(mLink) + ')\n'
+        else:
+            update.effective_message.reply_text(
+                str(mLink), parse_mode=ParseMode.MARKDOWN,
+                disable_web_page_preview=True
+            )
         print("res", res)
         print("This round is done!")
-    update.effective_message.reply_photo(
+    if str(update.effective_chat.id) != "-1001567635369":
+        update.effective_message.reply_photo(
             POSTER,
             res, parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True
@@ -210,10 +224,11 @@ def pahesh(bot: Bot, update: Update):
     res = ""
 
     # Getting File Name
-    Name = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/h1/span').text
-    print("Name: ", Name)
-    res += str(Name) + '\n'
-    POSTER = str(driver.find_element_by_xpath('//img[@class="imdbwp__img"]').get_attribute('src'))
+    if str(update.effective_chat.id) != "-1001567635369":
+        Name = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/h1/span').text
+        print("Name: ", Name)
+        res += str(Name) + '\n'
+        POSTER = str(driver.find_element_by_xpath('//img[@class="imdbwp__img"]').get_attribute('src'))
     navTabs = driver.find_elements_by_xpath('//ul[@class="tabs-nav"]')
     print("There are ", len(navTabs), " columns")
     for x in range(len(navTabs)):
@@ -294,6 +309,8 @@ def pahesh(bot: Bot, update: Update):
                             break
                 if '480p' in ver:
                     continue
+                elif str(update.effective_chat.id) == "-1001567635369" and '1080p' in ver:
+                    break
                 options = webdriver.FirefoxOptions()
                 options.log.level = "trace"
                 options.add_argument("-remote-debugging-port=9224")
@@ -409,8 +426,15 @@ def pahesh(bot: Bot, update: Update):
                 # tDriver.switch_to.window(tDriver.window_handles[-1])
                 mLink = driver.current_url
                 print(ver, mLink)
-                res += '[' + str(ver) + '](' + str(mLink) + ')\n'
+                if str(update.effective_chat.id) != "-1001567635369":
+                    res += '[' + str(ver) + '](' + str(mLink) + ')\n'
+                else:
+                    update.effective_message.reply_text(
+                        str(mLink), parse_mode=ParseMode.MARKDOWN,
+                        disable_web_page_preview=True
+                    )
                 driver.quit()
+                time.sleep(5)
                 #mLink = getFromInter(GoogleDriveLink.get_attribute('href'))
                 '''if mLink == "NA":
                     raise Exception('NO Cont button')
@@ -425,11 +449,12 @@ def pahesh(bot: Bot, update: Update):
 
     # here we go
     # driver.quit()
-    update.effective_message.reply_photo(
-        POSTER,
-        res, parse_mode=ParseMode.MARKDOWN,
-        disable_web_page_preview=True
-    )
+    if str(update.effective_chat.id) != "-1001567635369":
+        update.effective_message.reply_photo(
+            POSTER,
+            res, parse_mode=ParseMode.MARKDOWN,
+            disable_web_page_preview=True
+        )
     '''bot.send_message(chat_id=-1001581805288, text=res, parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True)'''
 
@@ -439,11 +464,16 @@ def clook(bot: Bot, update: Update):
     if update.effective_chat.type == "private" or str(update.effective_chat.id) == "-1001567635369":
         msg = update.effective_message.text
         if 'https://pahe.ph/' in msg:
-            if 'Season' in msg:
-                # TV Show
-                pahesh(bot, update)
-            else:
-                pahedl(bot, update)
+            q.put(update)
+            while not drake and not q.empty():
+                drake = True
+                cupdate = q.get()
+                if 'Season' in cupdate.effective_message.text:
+                    # TV Show
+                    pahesh(bot, cupdate)
+                else:
+                    pahedl(bot, cupdate)
+                drake = False
 
 
 LINK_HANDLER = MessageHandler(CustomFilters.has_text, clook)
