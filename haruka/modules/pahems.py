@@ -41,6 +41,7 @@ def rmz(bot: Bot, update: Update):
     driver.get(MovieLink)
     time.sleep(5)
     print(driver.title)
+    print("-------\n", str(driver.find_element_by_xpath('/html/body').text)[:150], "\n-----------\n")
     cnulink = str(driver.find_elements_by_xpath('//div[@style="position:relative"]')[-1].text).split('\n')[-1]
     driver.quit()
     time.sleep(5)
