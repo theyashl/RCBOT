@@ -35,8 +35,11 @@ def rmz(bot: Bot, update: Update):
     options.add_argument("-disable-gpu")
     options.add_argument("-no-sandbox")
 
+    profile = webdriver.FirefoxProfile()
+    profile.set_preference("general.useragent.override", "Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0")
+
     binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
-    driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'),
+    driver = webdriver.Firefox(firefox_binary=binary, firefox_profile=profile, executable_path=os.environ.get('GECKODRIVER_PATH'),
                                options=options)
     driver.get(MovieLink)
     time.sleep(5)
