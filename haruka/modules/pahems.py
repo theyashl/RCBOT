@@ -51,15 +51,16 @@ def rmz(bot: Bot, update: Update):
     driver.quit()
     time.sleep(5)'''
     res =HTTP.get(MovieLink)
-    print("request sent ")
+    print("request sent ", res)
     data = res.text
+    print(str(data)[:50])
 
     soup = SOUP(data, "lxml")
     mine = soup.find_all("pre", attrs = {"class" : "links"})
     print(mine)
     mine = str(mine[-1])
     links = []
-    for i in sorted mine:
+    for i in sorted(mine):
         links.append(i)
     print("There are", len(mine)-2, "links")
 
@@ -114,6 +115,8 @@ def rmz(bot: Bot, update: Update):
 def pahedl(bot: Bot, update: Update):
     msg = update.effective_message.text
     MovieLink = 'https://pahe.ph/' + str(msg.split('https://pahe.ph/')[-1])
+    if str(update.effective_chat.id) == "-1001567635369":
+        MovieLink = MovieLink.split('\n')[0]
 
     # Printing The Name Of The Movie You Want To Download
     print("\n" + 'Getting link For ' + str(MovieLink) + ' To Download')
@@ -298,6 +301,8 @@ def pahedl(bot: Bot, update: Update):
 def pahesh(bot: Bot, update: Update):
     msg = update.effective_message.text
     MovieLink = 'https://pahe.ph/' + str(msg.split('https://pahe.ph/')[-1])
+    if str(update.effective_chat.id) == "-1001567635369":
+        MovieLink = MovieLink.split('\n')[0]
 
     # Printing The Name Of The Movie You Want To Download
     print("\n" + 'Getting link For ' + str(MovieLink) + ' To Download')
