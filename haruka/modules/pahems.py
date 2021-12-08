@@ -51,12 +51,15 @@ def rmz(bot: Bot, update: Update):
     driver.quit()
     time.sleep(5)'''
     res =HTTP.get(MovieLink)
+    print("request sent ")
     data = res.text
 
     soup = SOUP(data, "lxml")
-    mine = str(soup.find_all("pre", attrs = {"class" : "links"})[-1])
+    mine = soup.find_all("pre", attrs = {"class" : "links"})
+    print(mine)
+    mine = str(mine[-1])
     links = []
-    for i in mine:
+    for i in sorted mine:
         links.append(i)
     print("There are", len(mine)-2, "links")
 
