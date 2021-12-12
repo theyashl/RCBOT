@@ -15,101 +15,7 @@ from bs4 import BeautifulSoup as SOUP
 import requests as HTTP
 from queue import Queue
 q = Queue(maxsize=10)
-r = Queue(maxsize=10)
 drake = False
-snoop = False
-
-# /html/body/div[2]/div[3]/div[3]/div[1]/div[5]/div[3]/div[15]/pre/a
-# /html/body/div[2]/div[3]/div[3]/div[1]/div[5]/div[3]/div[14]/pre/a
-# //div[@style="position:relative"][-1] inner text split \n -1
-def rmz(bot: Bot, update: Update):
-    msg = update.effective_message.text
-    MovieLink = 'https://rmz.cr/' + str(msg.split('https://rmz.cr/')[-1])
-
-    # Printing The Name Of The Movie You Want To Download
-    print("\n" + 'Getting link For ' + str(MovieLink) + ' To Download')
-
-    # Openining The Browser & Getting To Pahe.in
-    '''options = webdriver.FirefoxOptions()
-    options.log.level = "trace"
-    options.add_argument("-remote-debugging-port=9224")
-    options.add_argument("-headless")
-    options.add_argument("-disable-gpu")
-    options.add_argument("-no-sandbox")
-
-    profile = webdriver.FirefoxProfile()
-    profile.set_preference("general.useragent.override", "Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0")
-
-    binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
-    driver = webdriver.Firefox(firefox_binary=binary, firefox_profile=profile, executable_path=os.environ.get('GECKODRIVER_PATH'),
-                               options=options)
-    driver.get(MovieLink)
-    time.sleep(5)
-    print(driver.title)
-    print("-------\n", str(driver.find_element_by_xpath('/html/body').text)[:150], "\n-----------\n")
-    cnulink = str(driver.find_elements_by_xpath('//div[@style="position:relative"]')[-1].text).split('\n')[-1]
-    driver.quit()
-    time.sleep(5)'''
-    res =HTTP.get(MovieLink)
-    print("request sent ", res)
-    data = res.text
-    print(str(data)[:50])
-
-    soup = SOUP(data, "lxml")
-    mine = soup.find_all("pre", attrs = {"class" : "links"})
-    print(mine)
-    mine = str(mine[-1])
-    links = []
-    for i in sorted(mine):
-        links.append(i)
-    print("There are", len(mine)-2, "links")
-
-    for i in range(1, len(links)-1):
-        cnulink = links[i]
-        options = webdriver.FirefoxOptions()
-        options.log.level = "trace"
-        options.add_argument("-remote-debugging-port=9224")
-        options.add_argument("-headless")
-        options.add_argument("-disable-gpu")
-        options.add_argument("-no-sandbox")
-
-        binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
-        driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'),
-                                   options=options)
-        driver.get(cnulink)
-        time.sleep(5)
-        freeDownload = driver.find_element_by_xpath('//input[@id="method_free"]')
-        freeDownload.location_once_scrolled_into_view
-        freeDownload.click()
-        print("Clicked Free Download")
-        time.sleep(14)
-        print("Running for captach")
-        spans = driver.find_elements_by_xpath('//td[@align="right"]/div/span')
-        cpt = {}
-        for span in spans:
-            cpt[int(str(span.get_attribute('style')).split('padding-left:')[1].split('px')[0])] = int(span.text)
-        num = ""
-        for i in sorted(cpt):
-            num += str(cpt[i])
-        print("captcha num", num)
-        captchabox = driver.find_element_by_xpath('//input[@class="captcha_code"]')
-        captchabox.location_once_scrolled_into_view
-        driver.execute_script("arguments[0].click();", captchabox)
-        captchabox.send_keys(num)
-
-        driver.find_element_by_xpath('//button[@class="downloadbtn"]').click()
-        print("Clicked Download button")
-        time.sleep(5)
-
-        lastBtn = driver.find_element_by_xpath('//button[@id="downloadbtn"]')
-        lastBtn.location_once_scrolled_into_view
-        crlink = str(lastBtn.get_attribute('onclick')).split("'")[1]
-        driver.quit()
-        update.effective_message.reply_text(
-            crlink, parse_mode=ParseMode.MARKDOWN,
-            disable_web_page_preview=True
-        )
-        time.sleep(5)
 
 # CUST_FILTER_HANDLER = MessageHandler(CustomFilters.has_text, reply_filter)
 def pahedl(bot: Bot, update: Update):
@@ -266,7 +172,7 @@ def pahedl(bot: Bot, update: Update):
             print("Clicked Continue")
             time.sleep(5)
             # tDriver.switch_to.window(tDriver.window_handles[-1])
-            mLink = str(driver.current_url).split('#')[0]
+            mLink = str(driver.current_url)
             print(mLink)
             driver.quit()
         except Exception as e:
@@ -563,12 +469,9 @@ def pahesh(bot: Bot, update: Update):
 def clook(bot: Bot, update: Update):
     if update.effective_chat.type == "private" or str(update.effective_chat.id) == "-1001581805288":
         global drake
-        global snoop
         global q
-        global r
         msg = update.effective_message.text
         if msg is not None:
-            print("Get to the work ")
             if 'https://pahe.ph/' in msg:
                 q.put(update)
                 while not drake and not q.empty():
@@ -580,16 +483,6 @@ def clook(bot: Bot, update: Update):
                     else:
                         pahedl(bot, cupdate)
                     drake = False
-            elif 'https://rmz.cr/' in msg:
-                r.put(update)
-                while not snoop and not r.empty():
-                    snoop = True
-                    cupdate = r.get()
-                    try:
-                        rmz(bot, cupdate)
-                    except Exception as e:
-                        print(e)
-                    snoop = False
 
 
 LINK_HANDLER = MessageHandler(CustomFilters.has_text, clook)
