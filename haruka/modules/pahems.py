@@ -115,7 +115,7 @@ def rmz(bot: Bot, update: Update):
 def pahedl(bot: Bot, update: Update):
     msg = update.effective_message.text
     MovieLink = 'https://pahe.ph/' + str(msg.split('https://pahe.ph/')[-1])
-    if str(update.effective_chat.id) == "-1001567635369":
+    if str(update.effective_chat.id) == "1581805288":
         MovieLink = MovieLink.split('\n')[0]
 
     # Printing The Name Of The Movie You Want To Download
@@ -138,7 +138,7 @@ def pahedl(bot: Bot, update: Update):
     res = ""
 
     # Getting File Name
-    if str(update.effective_chat.id) != "-1001567635369":
+    if str(update.effective_chat.id) != "1581805288":
         Name = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/h1/span').text
         print("Name: ", Name)
         res += str(Name) + '\n'
@@ -167,7 +167,7 @@ def pahedl(bot: Bot, update: Update):
         print(ver)
         if '480p' in ver:
             continue
-        elif str(update.effective_chat.id) == "-1001567635369" and '1080p' in ver:
+        elif str(update.effective_chat.id) == "1581805288" and '1080p' in ver:
             break
         options = webdriver.FirefoxOptions()
         options.log.level = "trace"
@@ -278,7 +278,7 @@ def pahedl(bot: Bot, update: Update):
             break
 
         time.sleep(5)
-        if str(update.effective_chat.id) != "-1001567635369":
+        if str(update.effective_chat.id) != "1581805288":
             res += '[' + str(ver) + '](' + str(mLink) + ')\n'
         else:
             update.effective_message.reply_text(
@@ -287,7 +287,7 @@ def pahedl(bot: Bot, update: Update):
             )
         print("res", res)
         print("This round is done!")
-    if str(update.effective_chat.id) != "-1001567635369":
+    if str(update.effective_chat.id) != "1581805288":
         update.effective_message.reply_photo(
             POSTER,
             res, parse_mode=ParseMode.MARKDOWN,
@@ -301,7 +301,7 @@ def pahedl(bot: Bot, update: Update):
 def pahesh(bot: Bot, update: Update):
     msg = update.effective_message.text
     MovieLink = 'https://pahe.ph/' + str(msg.split('https://pahe.ph/')[-1])
-    if str(update.effective_chat.id) == "-1001567635369":
+    if str(update.effective_chat.id) == "1581805288":
         MovieLink = MovieLink.split('\n')[0]
 
     # Printing The Name Of The Movie You Want To Download
@@ -324,7 +324,7 @@ def pahesh(bot: Bot, update: Update):
     res = ""
 
     # Getting File Name
-    if str(update.effective_chat.id) != "-1001567635369":
+    if str(update.effective_chat.id) != "1581805288":
         Name = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/article/div/h1/span').text
         print("Name: ", Name)
         res += str(Name) + '\n'
@@ -409,7 +409,7 @@ def pahesh(bot: Bot, update: Update):
                             break
                 if '480p' in ver:
                     continue
-                elif str(update.effective_chat.id) == "-1001567635369" and '1080p' in ver:
+                elif str(update.effective_chat.id) == "1581805288" and '1080p' in ver:
                     break
                 options = webdriver.FirefoxOptions()
                 options.log.level = "trace"
@@ -526,7 +526,7 @@ def pahesh(bot: Bot, update: Update):
                 # tDriver.switch_to.window(tDriver.window_handles[-1])
                 mLink = driver.current_url
                 print(ver, mLink)
-                if str(update.effective_chat.id) != "-1001567635369":
+                if str(update.effective_chat.id) != "1581805288":
                     res += '[' + str(ver) + '](' + str(mLink) + ')\n'
                 else:
                     update.effective_message.reply_text(
@@ -549,7 +549,7 @@ def pahesh(bot: Bot, update: Update):
 
     # here we go
     # driver.quit()
-    if str(update.effective_chat.id) != "-1001567635369":
+    if str(update.effective_chat.id) != "1581805288":
         update.effective_message.reply_photo(
             POSTER,
             res, parse_mode=ParseMode.MARKDOWN,
@@ -561,13 +561,14 @@ def pahesh(bot: Bot, update: Update):
 
 @run_async
 def clook(bot: Bot, update: Update):
-    if update.effective_chat.type == "private" or str(update.effective_chat.id) == "-1001567635369":
+    if update.effective_chat.type == "private" or str(update.effective_chat.id) == "1581805288":
         global drake
         global snoop
         global q
         global r
         msg = update.effective_message.text
         if msg is not None:
+            print("Get to the work ")
             if 'https://pahe.ph/' in msg:
                 q.put(update)
                 while not drake and not q.empty():
