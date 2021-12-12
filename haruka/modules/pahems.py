@@ -188,7 +188,7 @@ def pahedl(bot: Bot, update: Update):
             res += '[' + str(ver) + '](' + str(mLink) + ')\n'
         else:
             update.effective_message.reply_text(
-                str(mLink), parse_mode=ParseMode.MARKDOWN,
+                str(mLink), parse_mode=ParseMode.HTML,
                 disable_web_page_preview=True
             )
         print("res", res)
@@ -196,7 +196,7 @@ def pahedl(bot: Bot, update: Update):
     if str(update.effective_chat.id) != "-1001581805288":
         update.effective_message.reply_photo(
             POSTER,
-            res, parse_mode=ParseMode.MARKDOWN,
+            res, parse_mode=ParseMode.HTML,
             disable_web_page_preview=True
         )
     # driver.quit()
@@ -436,7 +436,7 @@ def pahesh(bot: Bot, update: Update):
                     res += '[' + str(ver) + '](' + str(mLink) + ')\n'
                 else:
                     update.effective_message.reply_text(
-                        str(mLink), parse_mode=ParseMode.MARKDOWN,
+                        str(mLink), parse_mode=ParseMode.HTML,
                         disable_web_page_preview=True
                     )
                 driver.quit()
@@ -458,7 +458,7 @@ def pahesh(bot: Bot, update: Update):
     if str(update.effective_chat.id) != "-1001581805288":
         update.effective_message.reply_photo(
             POSTER,
-            res, parse_mode=ParseMode.MARKDOWN,
+            res, parse_mode=ParseMode.HTML,
             disable_web_page_preview=True
         )
     '''bot.send_message(chat_id=-1001581805288, text=res, parse_mode=ParseMode.MARKDOWN,
