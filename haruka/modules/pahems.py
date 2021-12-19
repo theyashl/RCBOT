@@ -473,14 +473,16 @@ def clook(bot: Bot, update: Update):
         msg = update.effective_message.text
         if msg is not None:
             if 'https://pahe.ph/' in msg:
+                print("Getting file with message:\n", msg)
                 q.put(update)
                 while not drake and not q.empty():
                     drake = True
                     cupdate = q.get()
                     if 'Season' in cupdate.effective_message.text:
-                        # TV Show
+                        print("It's TV Show")
                         pahesh(bot, cupdate)
                     else:
+                        print("It's Movie")
                         pahedl(bot, cupdate)
                     drake = False
 
