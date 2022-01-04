@@ -20,7 +20,7 @@ drake = False
 # CUST_FILTER_HANDLER = MessageHandler(CustomFilters.has_text, reply_filter)
 def pahedl(bot: Bot, update: Update):
     msg = update.effective_message.text
-    MovieLink = 'https://pahe.ph/' + str(msg.split('https://pahe.ph/')[-1])
+    MovieLink = 'https://pahe.li/' + str(msg.split('https://pahe.li/')[-1])
     if str(update.effective_chat.id) == "-1001581805288":
         MovieLink = MovieLink.split('\n')[0]
 
@@ -209,7 +209,7 @@ def pahedl(bot: Bot, update: Update):
 
 def pahesh(bot: Bot, update: Update):
     msg = update.effective_message.text
-    MovieLink = 'https://pahe.ph/' + str(msg.split('https://pahe.ph/')[-1])
+    MovieLink = 'https://pahe.li/' + str(msg.split('https://pahe.li/')[-1])
     if str(update.effective_chat.id) == "-1001581805288":
         MovieLink = MovieLink.split('\n')[0]
 
@@ -475,7 +475,7 @@ def clook(bot: Bot, update: Update):
         global q
         msg = update.effective_message.text
         if msg is not None:
-            if 'https://pahe.ph/' in msg:
+            if 'https://pahe.li/' in msg:
                 print("Getting file with message:\n", msg)
                 q.put(update)
                 while not drake and not q.empty():
