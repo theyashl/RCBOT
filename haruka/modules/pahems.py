@@ -133,14 +133,13 @@ def pahedl(bot: Bot, update: Update):
             # Clicking Generate Link Button
             print("Generating Link")
             try:
-                GenerateLink = driver.find_element_by_xpath('//*[@id="generater"]')
-                GenerateLink.click()
-            except:
-                WebDriverWait(driver, 15).until(
+                GenerateLink = WebDriverWait(driver, 100).until(
                     EC.element_to_be_clickable(
-                        (By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/button[1]'))).click()
-                GenerateLink = driver.find_element_by_xpath('//*[@id="generater"]')
-                GenerateLink.click()
+                        (By.XPATH, '//*[@id="generater"]')))
+            except:
+                driver.quit()
+                raise Exception("No Generate Link Button")
+            GenerateLink.click()
 
             # Adding 15 Second Pause For Loading The Page
             time.sleep(15)
