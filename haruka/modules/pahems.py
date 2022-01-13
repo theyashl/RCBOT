@@ -119,8 +119,9 @@ def pahedl(bot: Bot, update: Update):
             try:
                 Robot = WebDriverWait(driver, 100).until(
                     EC.element_to_be_clickable(
-                        (By.XPATH, '/html/body/div[2]/div/div[1]/div/form/div/div[2]/center/img')))
+                        (By.XPATH, '/html/body/div[1]/div/div[1]/div/form/div/div[2]/center/img')))
             except:
+                print("Robot not found")
                 driver.quit()
                 raise Exception("No Mega Link")
             Robot.location_once_scrolled_into_view
@@ -137,14 +138,6 @@ def pahedl(bot: Bot, update: Update):
                     EC.element_to_be_clickable(
                         (By.XPATH, '//*[@id="generater"]')))
             except:
-                driver.save_screenshot("image.png")
-                if str(update.effective_chat.id) != "-1001581805288":
-                    update.effective_message.reply_photo(
-                        "image.png",
-                        res, parse_mode=ParseMode.HTML,
-                        disable_web_page_preview=True
-                    )
-                os.remove("image.png")
                 driver.quit()
                 raise Exception("No Generate Link Button")
             GenerateLink.click()
