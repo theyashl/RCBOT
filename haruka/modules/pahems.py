@@ -138,7 +138,7 @@ def pahedl(bot: Bot, update: Update):
                 # //*[@id="generater"]
                 GenerateLink = WebDriverWait(driver, 100).until(
                     EC.element_to_be_clickable(
-                        (By.XPATH, '/html/body/div[2]/div/div[1]/div/div[2]/div[3]/a/img')))
+                        (By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div[3]/a/img')))
             except:
                 driver.quit()
                 raise Exception("No Generate Link Button")
