@@ -120,7 +120,7 @@ def pahedl(bot: Bot, update: Update):
             try:
                 Robot = WebDriverWait(driver, 100).until(
                     EC.element_to_be_clickable(
-                        (By.XPATH, '/html/body/div[1]/div/div[1]/div/form/div/div[2]/center/img')))
+                        (By.XPATH, '/html/body/div[2]/div/div[1]/div/form/div/div[2]/center/img')))
             except:
                 print("Robot not found")
                 driver.quit()
