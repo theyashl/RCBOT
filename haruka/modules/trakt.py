@@ -266,7 +266,7 @@ def trendingm(bot: Bot, update: Update):
     items = Trakt['movies'].trending()
     for i in range(10):
         res += "[" + items[i].title + " (" + str(items[i].year) + ")](https://t.me/share/url?url=/minfo%20{sid})\n".format(
-                sid=item[i].ids.tmdb)
+                sid=items[i].get_key('tmdb'))
 
     update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
 
@@ -277,7 +277,7 @@ def trendings(bot: Bot, update: Update):
     items = Trakt['shows'].trending()
     for i in range(10):
         res += "[" + items[i].title + " (" + str(items[i].year) + ")](https://t.me/share/url?url=/sinfo%20{sid})".format(
-                sid=items[i].ids.tmdb)
+                sid=items[i].get_key('tmdb'))
 
     update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
 
