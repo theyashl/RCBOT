@@ -114,7 +114,7 @@ def minfo(bot: Bot, update: Update):
         del strm
     except Exception:
         pass
-    res += "\n*Budget:* _" + str(int(info['budget'])/1000000) + " Million USD_ / *Revenue:* _" + str(int(info['revenue'])/1000000) + " Million USD_"
+    res += "\n*Budget:* _" + str(int(info['budget'])//1000000) + " Million USD_\n*Revenue:* _" + str(int(info['revenue'])//1000000) + " Million USD_"
     res += "\n\n*Recommendations:*"
     recs = show.recommendations()
     recs = recs['results'][:5]
