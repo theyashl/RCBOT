@@ -108,10 +108,10 @@ def minfo(bot: Bot, update: Update):
     res += "\n*Runtime:* _" + str(info['runtime']) + " minutes_"
     res += "\n*Overview:* " + info['overview']
     try:
-        res += "\n*Stream On:* "
-        # for s in show.watch_providers()['results']['IN']['flatrate']:
-        #     res += str(s['provider_name']) + ' '
-        res += ", ".join([str(s['provider_name']) for s in show.watch_providers()['results']['IN']['flatrate']])
+        strm = [str(s['provider_name']) for s in show.watch_providers()['results']['IN']['flatrate']]
+        if len(strm) > 0:
+            res += "\n*Stream On:* " + ", ".join(strm)
+        del strm
     except Exception:
         pass
     res += "\n*Budget:* _" + str(int(info['budget'])/1000000) + " Million USD_ / *Revenue:* _" + str(int(info['revenue'])/1000000) + " Million USD_"
