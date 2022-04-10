@@ -243,9 +243,13 @@ def otv(bot: Bot, update: Update):
         except KeyError as e:
             res += "NA"
         res += "_)\n"
+    POSTER = data[0]['backdrop_path'] or data[1]['backdrop_path']
 
     del data
-    update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
+    update.effective_message.reply_photo(
+        POSTER,
+        res, parse_mode=ParseMode.MARKDOWN
+    )
 
 
 @run_async
@@ -255,9 +259,13 @@ def umovie(bot: Bot, update: Update):
     response = mov.upcoming()
     for j in response['results']:
         if datetime.datetime.strptime(j['release_date'], "%Y-%m-%d") > datetime.datetime.today():
-            res += j['title'] + ", " + j['release_date'] + "\n"
+            res += "[" + j['title'] + "](https://t.me/share/url?url=/minfo%20{sid}), ".format(sid=j['id']) + j['release_date'] + "\n"
+    POSTER = response['results'][0]['backdrop_path']
 
-    update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
+    update.effective_message.reply_photo(
+        POSTER,
+        res, parse_mode=ParseMode.MARKDOWN
+    )
 
 
 @run_async
@@ -268,7 +276,12 @@ def trendingm(bot: Bot, update: Update):
         res += "[" + items[i].title + " (" + str(items[i].year) + ")](https://t.me/share/url?url=/minfo%20{sid})\n".format(
                 sid=items[i].get_key('tmdb'))
 
-    update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
+    POSTER = tmdb.Movies(items[0].get_key('tmdb')).backdrop_path or tmdb.Movies(items[1].get_key('tmdb')).backdrop_path
+
+    update.effective_message.reply_photo(
+        POSTER,
+        res, parse_mode=ParseMode.MARKDOWN
+    )
 
 
 @run_async
@@ -278,8 +291,12 @@ def trendings(bot: Bot, update: Update):
     for i in range(10):
         res += "[" + items[i].title + " (" + str(items[i].year) + ")](https://t.me/share/url?url=/sinfo%20{sid})".format(
                 sid=items[i].get_key('tmdb'))
+    POSTER = tmdb.TV(items[0].get_key('tmdb')).backdrop_path or tmdb.TV(items[1].get_key('tmdb')).backdrop_path
 
-    update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
+    update.effective_message.reply_photo(
+        POSTER,
+        res, parse_mode=ParseMode.MARKDOWN
+    )
 
 
 MINFO_HANDLER = DisableAbleCommandHandler("minfo", minfo)
