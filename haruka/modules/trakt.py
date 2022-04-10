@@ -89,6 +89,50 @@ def tvair(bot: Bot, update: Update):
 
 
 @run_async
+def minfo(bot: Bot, update: Update):
+    message = update.effective_message
+    res = ""
+    # /sinfo 1234
+    sid = message.text[7:]
+    show = tmdb.Movies(sid)
+    info = show.info()
+    res = ""
+
+    res += "*Title: {name}* ({language}, {year})".format(name=info['original_title'],
+                                                         language=str(info['original_language']),
+                                                         year=str(info['release_date']).split("-")[0])
+    res += "\n_" + info['tagline'] + "_"
+    res += "\n*Genres:* "
+    for g in info['genres']:
+        res += g['name'] + " "
+    res += "\n*Runtime:* _" + str(info['runtime']) + " minutes_"
+    res += "\n*Overview:* " + info['overview']
+    try:
+        res += "\n*Stream On:* "
+        # for s in show.watch_providers()['results']['IN']['flatrate']:
+        #     res += str(s['provider_name']) + ' '
+        res += ", ".join([str(s['provider_name']) for s in show.watch_providers()['results']['IN']['flatrate']])
+    except Exception:
+        pass
+    res += "\n*Budget:* _" + str(int(info['budget'])/1000000) + " Million USD_ / *Revenue:* _" + str(int(info['revenue'])/1000000) + " Million USD_"
+    res += "\n\n*Recommendations:*"
+    recs = show.recommendations()
+    recs = recs['results'][:5]
+    for r in recs:
+        res += "\n" + "[" + r['title'] + "](https://t.me/share/url?url=/sinfo%20{sid})".format(sid=r['id'])
+
+    POSTER = "https://www.themoviedb.org/t/p/original" + info['poster_path']
+    del show
+    del info
+    del recs
+    update.effective_message.reply_photo(
+        POSTER,
+        res, parse_mode=ParseMode.MARKDOWN,
+        disable_web_page_preview=True
+    )
+
+
+@run_async
 def sinfo(bot: Bot, update: Update):
     message = update.effective_message
     res = ""
@@ -221,7 +265,8 @@ def trendingm(bot: Bot, update: Update):
     res = "*Trending Movies:*\n\n"
     items = Trakt['movies'].trending()
     for i in range(10):
-        res += items[i].title + " (" + str(items[i].year) + ")\n"
+        res += "[" + items[i].title + " (" + str(items[i].year) + ")](https://t.me/share/url?url=/minfo%20{sid})\n".format(
+                sid=item['ids']['tmdb'])
 
     update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
 
@@ -231,7 +276,8 @@ def trendings(bot: Bot, update: Update):
     res = "*Trending Shows:*\n\n"
     items = Trakt['shows'].trending()
     for i in range(10):
-        res += items[i].title + " (" + str(items[i].year) + ")\n"
+        res += "[" + items[i].title + " (" + str(items[i].year) + ")](https://t.me/share/url?url=/sinfo%20{sid})".format(
+                sid=item['ids']['tmdb'])
 
     update.effective_message.reply_text(res, parse_mode=ParseMode.MARKDOWN)
 
