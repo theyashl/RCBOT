@@ -289,7 +289,7 @@ def trendings(bot: Bot, update: Update):
     res = "*Trending Shows:*\n\n"
     items = Trakt['shows'].trending()
     for i in range(10):
-        res += "[" + items[i].title + " (" + str(items[i].year) + ")](https://t.me/share/url?url=/sinfo%20{sid})".format(
+        res += "[" + items[i].title + " (" + str(items[i].year) + ")](https://t.me/share/url?url=/sinfo%20{sid})\n".format(
                 sid=items[i].get_key('tmdb'))
     # POSTER = tmdb.TV(items[0].get_key('tmdb')).backdrop_path or tmdb.TV(items[1].get_key('tmdb')).backdrop_path
     # .info() aint working
