@@ -276,11 +276,11 @@ def trendingm(bot: Bot, update: Update):
         res += "[" + items[i].title + " (" + str(items[i].year) + ")](https://t.me/share/url?url=/minfo%20{sid})\n".format(
                 sid=items[i].get_key('tmdb'))
 
-    POSTER = tmdb.Movies(items[0].get_key('tmdb')).backdrop_path or tmdb.Movies(items[1].get_key('tmdb')).backdrop_path
+    # POSTER = tmdb.Movies(items[0].get_key('tmdb')).backdrop_path or tmdb.Movies(items[1].get_key('tmdb')).backdrop_path
 
-    update.effective_message.reply_photo(
-        POSTER,
-        res, parse_mode=ParseMode.MARKDOWN
+    update.effective_message.reply_text(
+        res, parse_mode=ParseMode.MARKDOWN,
+        disable_web_page_preview=False
     )
 
 
@@ -291,11 +291,12 @@ def trendings(bot: Bot, update: Update):
     for i in range(10):
         res += "[" + items[i].title + " (" + str(items[i].year) + ")](https://t.me/share/url?url=/sinfo%20{sid})".format(
                 sid=items[i].get_key('tmdb'))
-    POSTER = tmdb.TV(items[0].get_key('tmdb')).backdrop_path or tmdb.TV(items[1].get_key('tmdb')).backdrop_path
+    # POSTER = tmdb.TV(items[0].get_key('tmdb')).backdrop_path or tmdb.TV(items[1].get_key('tmdb')).backdrop_path
+    # .info() aint working
 
-    update.effective_message.reply_photo(
-        POSTER,
-        res, parse_mode=ParseMode.MARKDOWN
+    update.effective_message.reply_text(
+        res, parse_mode=ParseMode.MARKDOWN,
+        disable_web_page_preview=False
     )
 
 
